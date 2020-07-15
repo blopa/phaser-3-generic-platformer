@@ -5,6 +5,7 @@ const Dotenv = require('dotenv-webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const { promises: fs } = require('fs');
 const packageJson = require('./package.json');
 
 // PATHS
@@ -12,8 +13,22 @@ const MAIN_DIR = path.resolve(__dirname, '');
 const IMAGE_DIR = path.resolve(__dirname, 'assets/images');
 const BUILD_PATH = path.resolve(__dirname, 'dist/build');
 const DIST_PATH = path.resolve(__dirname, 'dist');
+const STAGES_PATH = path.resolve(__dirname, 'assets/stages');
+const MAPS_PATH = path.resolve(__dirname, 'assets/maps');
 
-module.exports = () => {
+module.exports = async (env = {}) => {
+    const stageFiles = await fs.readdir(STAGES_PATH);
+    const mapFiles = await fs.readdir(MAPS_PATH);
+    const STAGES = JSON.stringify(
+        stageFiles
+            .map((stage) => stage.split('.')[0])
+    );
+    const MAPS = JSON.stringify(
+        mapFiles
+            .filter((stage) => stage.split('.')[1] === 'json' && !stage.includes('tileset'))
+            .map((stage) => stage.split('.')[0])
+    );
+
     return {
         entry: {
             main: path.resolve(__dirname, 'src/main.js'),
@@ -39,6 +54,8 @@ module.exports = () => {
                 WEBGL_RENDERER: JSON.stringify(true),
                 IS_DEV: JSON.stringify(true),
                 VERSION: JSON.stringify(packageJson.version),
+                STAGES,
+                MAPS,
             }),
             new HtmlWebpackPlugin({
                 hash: true,
