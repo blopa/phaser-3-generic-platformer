@@ -1,10 +1,11 @@
+/* globals IS_DEV */
 import Phaser from 'phaser';
 
 export default {
     type: Phaser.AUTO,
     parent: 'content',
-    width: 768,
-    height: 432,
+    width: 384,
+    height: 216,
     scale: {
         mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH,
         autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -12,4 +13,12 @@ export default {
     autoRound: false,
     localStorageName: 'base-phaser-cordova-project',
     pixelArt: true,
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: { y: 500 },
+            enableBody: true,
+            debug: IS_DEV,
+        },
+    },
 };

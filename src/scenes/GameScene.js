@@ -1,4 +1,4 @@
-/* globals __DEV__ */
+/* globals IS_DEV */
 import { Scene } from 'phaser';
 import ChristmasTree from '../sprites/ChristmasTree';
 import Background from '../sprites/Background';
