@@ -19,49 +19,58 @@ class GameScene extends Scene {
     }
 
     create() {
-        this.background = new Background({
-            scene: this,
-            x: 0,
-            y: 0,
-            asset: 'background',
-        }).setOrigin(0, 0);
+        this.cursors = this.input.keyboard.createCursorKeys();
+        this.player = this.physics.add.sprite(200, 200, 'christmas_tree').setDepth(500);
+        this.player.setBounce(0.2); // our player will bounce from items
+        this.player.setCollideWorldBounds(true); // don't go out of the map
+        // load the map
+        const map = this.make.tilemap({ key: 'map_03' });
 
-        this.christmastree = new ChristmasTree({
-            scene: this,
-            x: 400,
-            y: 200,
-            asset: 'christmas_tree',
-        }).setScale(3);
+        // tiles for the ground layer
+        const groundTiles = map.addTilesetImage('tileset', 'tilesetImage');
+        // create the ground layer
+        const backgroundLayer = map.createDynamicLayer('background', groundTiles, 0, 0);
+        const groundLayer = map.createDynamicLayer('details', groundTiles, 0, 0);
+        // the player will collide with this layer
+        groundLayer.setCollisionByExclusion([-1]);
+        this.physics.add.collider(groundLayer, this.player);
 
-        this.movablechristmastree = new MovableChristmasTree({
-            scene: this,
-            x: 650,
-            y: 300,
-            asset: 'christmas_tree',
-        }).setScale(3);
+        // set the boundaries of our game world
+        this.physics.world.bounds.width = groundLayer.width;
+        this.physics.world.bounds.height = groundLayer.height;
 
-        this.draggablechristmastree = new DraggableChristmasTree({
-            scene: this,
-            x: 500,
-            y: 300,
-            asset: 'christmas_tree',
-        }).setScale(3);
+        // set bounds so the camera won't go outside the game world
+        this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
+        // make the camera follow the player
+        this.cameras.main.startFollow(this.player);
 
-        this.add.existing(this.background);
-        this.add.existing(this.christmastree);
-        this.add.existing(this.draggablechristmastree);
-        this.add.existing(this.movablechristmastree);
+        // set background color, so the sky is not black
+        this.cameras.main.setBackgroundColor('#ccccff');
 
-        this.cameras.main.startFollow(this.movablechristmastree);
-
-        this.add.text(400, 100, 'Phaser 3 + Webpack 4 + ES6 + Cordova 8', {
-            font: '30px Roboto',
-            fill: '#7744ff',
+        const dataLayer = map.getObjectLayer('data');
+        dataLayer.objects.forEach((data) => {
+            const { x, y, name, height, width } = data;
+            if (name === 'hero') {
+                this.player.setX(
+                    Math.round(x)
+                );
+                this.player.setY(
+                    Math.round(y) - height
+                );
+            }
         });
     }
 
     update(time, delta) {
-        this.movablechristmastree.update(time, delta);
+        // this.movablechristmastree.update(time, delta);
+        if (this.cursors.left.isDown) {
+            this.player.body.setVelocityX(-200);
+        } else if (this.cursors.right.isDown) {
+            this.player.body.setVelocityX(200);
+        }
+        if ((this.cursors.space.isDown || this.cursors.up.isDown) && this.player.body.onFloor()) {
+            this.player.body.setVelocityY(-270);
+        }
     }
 }
 
