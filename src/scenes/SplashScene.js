@@ -25,7 +25,7 @@ class SplashScene extends Scene {
         });
 
         // this.load.atlas('player', 'assets/images/player.png', 'assets/atlas/player.json');
-        this.load.atlas('player', 'build/test1/atlas.png', 'build/test1/atlas.json');
+        this.load.atlas('player', 'test1/atlas.png', 'test1/atlas.json');
     }
 
     create() {

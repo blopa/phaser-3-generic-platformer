@@ -16,18 +16,60 @@ const BUILD_PATH = path.resolve(__dirname, 'dist/build');
 const DIST_PATH = path.resolve(__dirname, 'dist');
 const STAGES_PATH = path.resolve(__dirname, 'assets/stages');
 const MAPS_PATH = path.resolve(__dirname, 'assets/maps');
+const SPRITES_PATH = path.resolve(__dirname, 'assets/atlas_sprites');
 
 module.exports = async (env = {}) => {
     const stageFiles = await fs.readdir(STAGES_PATH);
     const mapFiles = await fs.readdir(MAPS_PATH);
+    const spritesFiles = await fs.readdir(SPRITES_PATH);
+
+    const sprites = [];
+    let sprite = [];
+    let prevSpriteKey;
+    spritesFiles.sort().forEach((spritesFile, index) => {
+        const fileName = spritesFile.split('.')[0];
+        const spriteKey = fileName.replace(/[\d.]+$/, '');
+        if (prevSpriteKey && spriteKey !== prevSpriteKey) {
+            sprites.push(sprite);
+            sprite = [];
+        } else {
+            sprite.push(spritesFile);
+        }
+
+        if (spritesFiles.length === index + 1) {
+            sprites.push(sprite);
+        }
+
+        prevSpriteKey = spriteKey;
+    });
+
+    const texPackerConfig = {
+        textureName: 'atlas',
+        fixedSize: false,
+        padding: 0,
+        allowRotation: false,
+        detectIdentical: true,
+        allowTrim: true,
+        exporter: 'Phaser3',
+        removeFileExtension: true,
+        prependFolderName: true,
+    };
+
+    sprites.forEach((spriteKeys) => {
+        spriteKeys.forEach(() => {
+            // TODO
+        });
+    });
+
     const STAGES = JSON.stringify(
         stageFiles
             .map((stage) => stage.split('.')[0])
     );
+
     const MAPS = JSON.stringify(
         mapFiles
-            .filter((stage) => stage.split('.')[1] === 'json' && !stage.includes('tileset'))
-            .map((stage) => stage.split('.')[0])
+            .filter((map) => map.split('.')[1] === 'json' && !map.includes('tileset'))
+            .map((map) => map.split('.')[0])
     );
 
     const sources = [];
@@ -55,19 +97,7 @@ module.exports = async (env = {}) => {
         },
         watch: true,
         plugins: [
-            new WebpackFreeTexPacker(sources, 'test1', {
-                textureName: 'atlas',
-                // width: 32,
-                // height: 32,
-                fixedSize: false,
-                padding: 0,
-                allowRotation: false,
-                detectIdentical: true,
-                allowTrim: true,
-                exporter: "Phaser3",
-                removeFileExtension: false,
-                prependFolderName: true,
-            }),
+            new WebpackFreeTexPacker(sources, '../test1', {}),
             new Dotenv({
                 path: './local.env', // load this now instead of the ones in '.env'
             }),

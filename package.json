@@ -22,7 +22,7 @@
         "@babel/preset-env": "^7.10.4",
         "babel-eslint": "^10.1.0",
         "babel-loader": "^8.1.0",
-        "browser-sync": "^2.26.7",
+        "browser-sync": "^2.26.10",
         "browser-sync-webpack-plugin": "^2.2.2",
         "copy-webpack-plugin": "^6.0.3",
         "dotenv-webpack": "^2.0.0",
