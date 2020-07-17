@@ -20,9 +20,27 @@ class GameScene extends Scene {
 
     create() {
         this.cursors = this.input.keyboard.createCursorKeys();
-        this.player = this.physics.add.sprite(200, 200, 'christmas_tree').setDepth(500);
+        this.player = this.physics.add.sprite(250, 250, 'player').setDepth(500);
         this.player.setBounce(0.2); // our player will bounce from items
         this.player.setCollideWorldBounds(true); // don't go out of the map
+        this.anims.create({
+            key: 'player_idle',
+            frames: this.anims.generateFrameNames('player', {
+                frames: [
+                    'player_idle_01',
+                    'player_idle_02',
+                    'player_idle_03',
+                    'player_idle_04',
+                    'player_idle_05',
+                    'player_idle_06',
+                ],
+            }),
+            frameRate: 12,
+            // yoyo: true,
+            repeat: -1,
+        });
+        this.player.anims.play('player_idle');
+
         // load the map
         const map = this.make.tilemap({ key: 'map_03' });
 

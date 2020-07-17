@@ -23,6 +23,8 @@ class SplashScene extends Scene {
             const key = fileName.split('.')[0];
             this.load.tilemapTiledJSON(key, `assets/maps/${fileName}.json`);
         });
+
+        this.load.atlas('player', 'assets/images/player.png', 'assets/atlas/player.json');
     }
 
     create() {
