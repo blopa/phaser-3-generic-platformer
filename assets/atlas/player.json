@@ -1,0 +1,89 @@
+{
+    "frames": [
+        {
+            "filename": "player_idle_01",
+            "frame": {
+                "x": 30,
+                "y": 58,
+                "w": 28,
+                "h": 28
+            },
+            "anchor": {
+                "x": 1,
+                "y": 1
+            }
+        },
+        {
+            "filename": "player_idle_02",
+            "frame": {
+                "x": 30,
+                "y": 0,
+                "w": 29,
+                "h": 27
+            },
+            "anchor": {
+                "x": 1,
+                "y": 1
+            }
+        },
+        {
+            "filename": "player_idle_03",
+            "frame": {
+                "x": 1,
+                "y": 59,
+                "w": 29,
+                "h": 28
+            },
+            "anchor": {
+                "x": 1,
+                "y": 1
+            }
+        },
+        {
+            "filename": "player_idle_04",
+            "frame": {
+                "x": 1,
+                "y": 0,
+                "w": 29,
+                "h": 28
+            },
+            "anchor": {
+                "x": 1,
+                "y": 1
+            }
+        },
+        {
+            "filename": "player_idle_05",
+            "frame": {
+                "x": 1,
+                "y": 29,
+                "w": 29,
+                "h": 29
+            },
+            "anchor": {
+                "x": 1,
+                "y": 1
+            }
+        },
+        {
+            "filename": "player_idle_06",
+            "frame": {
+                "x": 30,
+                "y": 28,
+                "w": 28,
+                "h": 29
+            },
+            "anchor": {
+                "x": 1,
+                "y": 1
+            }
+        }
+    ],
+    "meta": {
+        "size": {
+            "w": 60,
+            "h": 88
+        },
+        "scale": "1"
+    }
+}
