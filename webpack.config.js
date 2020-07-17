@@ -31,7 +31,7 @@ module.exports = async (env = {}) => {
                 spritesFiles.map((spritesFile) =>
                     path.resolve(__dirname, `assets/atlas_sprites/${spritesFolder}/${spritesFile}`)),
                 // path.resolve(__dirname, `assets/atlas_sprites/${spritesFolder}`),
-                '../test1',
+                '../assets/atlases',
                 {
                     textureName: spritesFolder,
                     fixedSize: false,
@@ -98,8 +98,8 @@ module.exports = async (env = {}) => {
             }),
             new CopyWebpackPlugin({
                 patterns: [{
-                    from: 'assets',
-                    to: '../assets',
+                    from: 'assets/stages',
+                    to: '../assets/stages',
                 }],
             }),
         ],
@@ -109,6 +109,10 @@ module.exports = async (env = {}) => {
                     test: /\.js$/,
                     use: ['babel-loader'],
                     include: path.join(__dirname, 'src'),
+                },
+                {
+                    test: /\.(png|jpg|svg|gif|webp)$/,
+                    use: ['file-loader'],
                 },
             ],
         },

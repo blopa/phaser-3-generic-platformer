@@ -1,6 +1,8 @@
 /* globals IS_DEV */
 /* globals STAGES */
 import { Scene } from 'phaser';
+import christmasTree from '../../assets/images/christmas_tree.png';
+import background from '../../assets/images/background.jpg';
 
 class SplashScene extends Scene {
     constructor() {
@@ -9,13 +11,13 @@ class SplashScene extends Scene {
 
     preload() {
         // load your assets
-        this.load.image('christmas_tree', 'assets/images/christmas_tree.png');
-        this.load.image('background', 'assets/images/background.jpg');
+        this.load.image('christmas_tree', christmasTree);
+        this.load.image('background', background);
 
         if (IS_DEV) {
-            this.load.image('tilesetImage', 'assets/stages/tileset.png');
+            this.load.image('tilesetImage', 'assets/stages/debug_tileset.png');
         } else {
-            this.load.image('tilesetImage', 'assets/images/stage_tileset.png');
+            this.load.image('tilesetImage', 'assets/stages/tileset.png');
         }
 
         // Stages
@@ -25,7 +27,7 @@ class SplashScene extends Scene {
         });
 
         // this.load.atlas('player', 'assets/images/player.png', 'assets/atlas/player.json');
-        this.load.atlas('player', 'test1/player.png', 'test1/player.json');
+        this.load.atlas('player', 'assets/atlases/player.png', 'assets/atlases/player.json');
     }
 
     create() {
