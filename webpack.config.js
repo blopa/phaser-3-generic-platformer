@@ -15,70 +15,43 @@ const IMAGE_DIR = path.resolve(__dirname, 'assets/images');
 const BUILD_PATH = path.resolve(__dirname, 'dist/build');
 const DIST_PATH = path.resolve(__dirname, 'dist');
 const STAGES_PATH = path.resolve(__dirname, 'assets/stages');
-const MAPS_PATH = path.resolve(__dirname, 'assets/maps');
 const SPRITES_PATH = path.resolve(__dirname, 'assets/atlas_sprites');
 
 module.exports = async (env = {}) => {
     const stageFiles = await fs.readdir(STAGES_PATH);
-    const mapFiles = await fs.readdir(MAPS_PATH);
-    const spritesFiles = await fs.readdir(SPRITES_PATH);
+    const spritesFolders = await fs.readdir(SPRITES_PATH);
 
-    const sprites = [];
-    let sprite = [];
-    let prevSpriteKey;
-    spritesFiles.sort().forEach((spritesFile, index) => {
-        const fileName = spritesFile.split('.')[0];
-        const spriteKey = fileName.replace(/[\d.]+$/, '');
-        if (prevSpriteKey && spriteKey !== prevSpriteKey) {
-            sprites.push(sprite);
-            sprite = [];
-        } else {
-            sprite.push(spritesFile);
-        }
-
-        if (spritesFiles.length === index + 1) {
-            sprites.push(sprite);
-        }
-
-        prevSpriteKey = spriteKey;
-    });
-
-    const texPackerConfig = {
-        textureName: 'atlas',
-        fixedSize: false,
-        padding: 0,
-        allowRotation: false,
-        detectIdentical: true,
-        allowTrim: true,
-        exporter: 'Phaser3',
-        removeFileExtension: true,
-        prependFolderName: true,
-    };
-
-    sprites.forEach((spriteKeys) => {
-        spriteKeys.forEach(() => {
-            // TODO
-        });
-    });
+    const texPackerPlugin = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const spritesFolder of spritesFolders) {
+        // eslint-disable-next-line no-await-in-loop
+        const spritesFiles = await fs.readdir(path.resolve(__dirname, `assets/atlas_sprites/${spritesFolder}`));
+        texPackerPlugin.push(
+            new WebpackFreeTexPacker(
+                spritesFiles.map((spritesFile) =>
+                    path.resolve(__dirname, `assets/atlas_sprites/${spritesFolder}/${spritesFile}`)),
+                // path.resolve(__dirname, `assets/atlas_sprites/${spritesFolder}`),
+                '../test1',
+                {
+                    textureName: spritesFolder,
+                    fixedSize: false,
+                    padding: 0,
+                    allowRotation: false,
+                    detectIdentical: true,
+                    allowTrim: true,
+                    exporter: 'Phaser3',
+                    removeFileExtension: true,
+                    prependFolderName: true,
+                }
+            )
+        );
+    }
 
     const STAGES = JSON.stringify(
         stageFiles
+            .filter((stage) => stage.split('.')[1] === 'json' && !stage.includes('tileset'))
             .map((stage) => stage.split('.')[0])
     );
-
-    const MAPS = JSON.stringify(
-        mapFiles
-            .filter((map) => map.split('.')[1] === 'json' && !map.includes('tileset'))
-            .map((map) => map.split('.')[0])
-    );
-
-    const sources = [];
-    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_01.png'));
-    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_02.png'));
-    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_03.png'));
-    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_04.png'));
-    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_05.png'));
-    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_06.png'));
 
     return {
         entry: {
@@ -97,7 +70,7 @@ module.exports = async (env = {}) => {
         },
         watch: true,
         plugins: [
-            new WebpackFreeTexPacker(sources, '../test1', {}),
+            ...texPackerPlugin,
             new Dotenv({
                 path: './local.env', // load this now instead of the ones in '.env'
             }),
@@ -107,7 +80,6 @@ module.exports = async (env = {}) => {
                 IS_DEV: JSON.stringify(true),
                 VERSION: JSON.stringify(packageJson.version),
                 STAGES,
-                MAPS,
             }),
             new HtmlWebpackPlugin({
                 hash: true,
