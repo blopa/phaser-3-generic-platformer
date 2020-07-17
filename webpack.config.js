@@ -6,6 +6,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { promises: fs } = require('fs');
+const WebpackFreeTexPacker = require('webpack-free-tex-packer');
 const packageJson = require('./package.json');
 
 // PATHS
@@ -29,6 +30,14 @@ module.exports = async (env = {}) => {
             .map((stage) => stage.split('.')[0])
     );
 
+    const sources = [];
+    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_01.png'));
+    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_02.png'));
+    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_03.png'));
+    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_04.png'));
+    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_05.png'));
+    sources.push(path.resolve(__dirname, 'assets/atlases/player_idle_06.png'));
+
     return {
         entry: {
             main: path.resolve(__dirname, 'src/main.js'),
@@ -46,6 +55,19 @@ module.exports = async (env = {}) => {
         },
         watch: true,
         plugins: [
+            new WebpackFreeTexPacker(sources, 'test1', {
+                textureName: 'atlas',
+                // width: 32,
+                // height: 32,
+                fixedSize: false,
+                padding: 0,
+                allowRotation: false,
+                detectIdentical: true,
+                allowTrim: true,
+                exporter: "Phaser3",
+                removeFileExtension: false,
+                prependFolderName: true,
+            }),
             new Dotenv({
                 path: './local.env', // load this now instead of the ones in '.env'
             }),

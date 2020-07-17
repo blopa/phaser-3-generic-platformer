@@ -24,7 +24,8 @@ class SplashScene extends Scene {
             this.load.tilemapTiledJSON(key, `assets/maps/${fileName}.json`);
         });
 
-        this.load.atlas('player', 'assets/images/player.png', 'assets/atlas/player.json');
+        // this.load.atlas('player', 'assets/images/player.png', 'assets/atlas/player.json');
+        this.load.atlas('player', 'build/test1/atlas.png', 'build/test1/atlas.json');
     }
 
     create() {
