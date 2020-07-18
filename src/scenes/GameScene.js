@@ -82,13 +82,15 @@ class GameScene extends Scene {
                         wall.body.setImmovable(true);
                         this.physics.add.collider(this.player, wall);
                         const properties = testsLayer.tileset[0].tileProperties[index - 1];
-                        wall.body.checkCollision = {
-                            ...wall.body.checkCollision,
-                            down: properties.collidesDown,
-                            up: properties.collidesUp,
-                            right: properties.collidesRight,
-                            left: properties.collidesLeft,
-                        };
+                        if (properties) {
+                            wall.body.checkCollision = {
+                                ...wall.body.checkCollision,
+                                down: properties.collidesDown,
+                                up: properties.collidesUp,
+                                right: properties.collidesRight,
+                                left: properties.collidesLeft,
+                            };
+                        }
                     });
                 }
             });
