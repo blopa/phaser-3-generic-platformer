@@ -42,11 +42,11 @@ class GameScene extends Scene {
         this.player.anims.play('player_idle');
 
         // load the map
-        const map = this.make.tilemap({ key: 'map_03' });
+        const map = this.make.tilemap({ key: 'city_01' });
 
         // tiles for the ground layer
         const groundTiles = map.addTilesetImage(
-            'tileset',
+            'city_tileset',
             'tilesetImage',
             16,
             16,
@@ -54,15 +54,17 @@ class GameScene extends Scene {
             2
         );
         // create the ground layer
-        const backgroundLayer = map.createDynamicLayer('background', groundTiles, 0, 0);
-        const groundLayer = map.createDynamicLayer('details', groundTiles, 0, 0);
+        const backgroundLayer1 = map.createDynamicLayer('background', groundTiles, 0, 0);
+        const backgroundLayer2 = map.createDynamicLayer('background2', groundTiles, 0, 0);
+        const detailsLayer = map.createDynamicLayer('details', groundTiles, 0, 0);
+        const detailsLayer2 = map.createDynamicLayer('details2', groundTiles, 0, 0);
         // the player will collide with this layer
-        groundLayer.setCollisionByExclusion([-1]);
-        this.physics.add.collider(groundLayer, this.player);
+        detailsLayer.setCollisionByExclusion([-1]);
+        this.physics.add.collider(detailsLayer, this.player);
 
         // set the boundaries of our game world
-        this.physics.world.bounds.width = groundLayer.width;
-        this.physics.world.bounds.height = groundLayer.height;
+        this.physics.world.bounds.width = detailsLayer.width;
+        this.physics.world.bounds.height = detailsLayer.height;
 
         // set bounds so the camera won't go outside the game world
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);

@@ -14,11 +14,12 @@ class SplashScene extends Scene {
         this.load.image('christmas_tree', christmasTree);
         this.load.image('background', background);
 
-        if (IS_DEV) {
-            this.load.image('tilesetImage', 'assets/tilesets/debug_tileset.png');
-        } else {
-            this.load.image('tilesetImage', 'assets/tilesets/tileset.png');
-        }
+        // if (IS_DEV) {
+        //     this.load.image('tilesetImage', 'assets/tilesets/debug_tileset.png');
+        // } else {
+        //     this.load.image('tilesetImage', 'assets/tilesets/tileset.png');
+        // }
+        this.load.image('tilesetImage', 'assets/tilesets/city_tileset.png');
 
         // Stages
         STAGES.forEach((fileName) => {

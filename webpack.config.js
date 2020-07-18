@@ -148,7 +148,8 @@ module.exports = async (env = {}) => {
                     include: path.join(__dirname, 'src'),
                 },
                 {
-                    test: `/.(${supportedImageTypes.join('|')})$/`,
+                    // test: `/.(${supportedImageTypes.join('|')})$/`,
+                    test: /\.(png|jpg|svg|gif|webp)$/,
                     use: ['file-loader'],
                 },
             ],
