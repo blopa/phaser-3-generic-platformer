@@ -43,7 +43,7 @@
         "html-webpack-plugin": "^4.3.0",
         "image-size": "^0.8.3",
         "jest": "^26.1.0",
-        "tile-extruder": "^2.0.1",
+        "tile-extruder": "^2.0.6",
         "webpack": "^4.43.0",
         "webpack-cli": "^3.3.12",
         "webpack-free-tex-packer": "^0.3.1"
