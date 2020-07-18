@@ -7,8 +7,12 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { promises: fs } = require('fs');
 const WebpackFreeTexPacker = require('webpack-free-tex-packer');
+const sizeOf = require('image-size');
 const { extrudeTilesetToImage } = require('tile-extruder');
 const packageJson = require('./package.json');
+
+const tileWidth = 16;
+const tileHeight = 16;
 
 // PATHS
 const MAIN_DIR = path.resolve(__dirname, '');
@@ -18,20 +22,31 @@ const DIST_PATH = path.resolve(__dirname, 'dist');
 const STAGES_PATH = path.resolve(__dirname, 'assets/stages');
 const TILESETS_PATH = path.resolve(__dirname, 'assets/tilesets');
 const SPRITES_PATH = path.resolve(__dirname, 'assets/atlas_sprites');
+const supportedImageTypes = ['png', 'jpg', 'svg', 'gif', 'webp'];
 
 module.exports = async (env = {}) => {
     const stageFiles = await fs.readdir(STAGES_PATH);
     const tilesetFiles = await fs.readdir(TILESETS_PATH);
     const tilesetImageFiles = tilesetFiles
-        .filter((tilesetFile) => ['png', 'jpg', 'svg', 'gif', 'webp'].includes(tilesetFile.split('.')[1]));
+        .filter((tilesetFile) => supportedImageTypes.includes(tilesetFile.split('.')[1]));
     const spritesFolders = await fs.readdir(SPRITES_PATH);
 
     const texPackerPlugin = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const spritesFolder of spritesFolders) {
         // eslint-disable-next-line no-await-in-loop
-        // const spritesFiles = await fs.readdir(path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}`));
-        // const squareRoot = Math.sqrt(spritesFiles.length + 1);
+        const spritesFiles = await fs.readdir(path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}`));
+
+        let spriteMaxHeight = 0;
+        spritesFiles.forEach((spritesFile) => {
+            const { height } = sizeOf(
+                path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}/${spritesFile}`)
+            );
+
+            if (height > spriteMaxHeight) {
+                spriteMaxHeight = height;
+            }
+        });
         texPackerPlugin.push(
             new WebpackFreeTexPacker(
                 // spritesFiles.map((spritesFile) =>
@@ -39,9 +54,7 @@ module.exports = async (env = {}) => {
                 path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}`),
                 '../assets/atlases',
                 {
-                    // width: Math.ceil(squareRoot) * 32,
-                    // height: Math.floor(squareRoot) * 32,
-                    // height: 32,
+                    height: spriteMaxHeight,
                     textureName: spritesFolder,
                     fixedSize: false,
                     padding: 0,
@@ -60,8 +73,8 @@ module.exports = async (env = {}) => {
     for (const tilesetFile of tilesetImageFiles) {
         // eslint-disable-next-line no-await-in-loop
         await extrudeTilesetToImage(
-            16,
-            16,
+            tileWidth,
+            tileHeight,
             `${TILESETS_PATH}/${tilesetFile}`,
             `${DIST_PATH}/assets/tilesets/${tilesetFile}`,
             {
@@ -73,7 +86,7 @@ module.exports = async (env = {}) => {
 
     const STAGES = JSON.stringify(
         stageFiles
-            .filter((stage) => stage.split('.')[1] === 'json' && !stage.includes('tileset'))
+            .filter((stage) => stage.split('.')[1] === 'json')
             .map((stage) => stage.split('.')[0])
     );
 
@@ -135,7 +148,7 @@ module.exports = async (env = {}) => {
                     include: path.join(__dirname, 'src'),
                 },
                 {
-                    test: /\.(png|jpg|svg|gif|webp)$/,
+                    test: `/.(${supportedImageTypes.join('|')})$/`,
                     use: ['file-loader'],
                 },
             ],
