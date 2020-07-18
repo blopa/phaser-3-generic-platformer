@@ -23,6 +23,7 @@ const STAGES_PATH = path.resolve(__dirname, 'assets/stages');
 const TILESETS_PATH = path.resolve(__dirname, 'assets/tilesets');
 const SPRITES_PATH = path.resolve(__dirname, 'assets/atlas_sprites');
 const supportedImageTypes = ['png', 'jpg', 'svg', 'gif', 'webp'];
+const supportedAudioTypes = ['m4a', 'mp3', 'ogg', 'opus', 'wav', 'webm'];
 
 module.exports = async (env = {}) => {
     const stageFiles = await fs.readdir(STAGES_PATH);
@@ -148,8 +149,11 @@ module.exports = async (env = {}) => {
                     include: path.join(__dirname, 'src'),
                 },
                 {
-                    // test: `/.(${supportedImageTypes.join('|')})$/`,
-                    test: /\.(png|jpg|svg|gif|webp)$/,
+                    test: new RegExp(`.(${supportedImageTypes.join('|')})`),
+                    use: ['file-loader'],
+                },
+                {
+                    test: new RegExp(`.(${supportedAudioTypes.join('|')})`),
                     use: ['file-loader'],
                 },
             ],

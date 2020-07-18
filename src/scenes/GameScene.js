@@ -58,9 +58,44 @@ class GameScene extends Scene {
         const backgroundLayer2 = map.createDynamicLayer('background2', groundTiles, 0, 0);
         const detailsLayer = map.createDynamicLayer('details', groundTiles, 0, 0);
         const detailsLayer2 = map.createDynamicLayer('details2', groundTiles, 0, 0);
+        const testsLayer = map.createDynamicLayer('tests', groundTiles, 0, 0);
+        this.wallGroup = this.physics.add.group();
+        testsLayer.tilemap.layer.data.forEach((tiles) => {
+            tiles.forEach((tile) => {
+                const { index } = tile;
+                if (index !== -1 && testsLayer.tileset[0].tileData[index - 1]) {
+                    const { objectgroup } = testsLayer.tileset[0].tileData[index - 1];
+                    const { objects } = objectgroup;
+                    objects.forEach((objectData) => {
+                        const { height, width, x, y } = objectData;
+                        const wall = this.add.rectangle(
+                            (tile.x * 16) + x,
+                            (tile.y * 16) + y,
+                            width,
+                            height
+                        )
+                            .setOrigin(0, 0)
+                            .setFillStyle(0x741B47);
+                        this.physics.add.existing(wall);
+                        this.wallGroup.add(wall);
+                        wall.body.setAllowGravity(false);
+                        wall.body.setImmovable(true);
+                        this.physics.add.collider(this.player, wall);
+                        const properties = testsLayer.tileset[0].tileProperties[index - 1];
+                        wall.body.checkCollision = {
+                            ...wall.body.checkCollision,
+                            down: properties.collidesDown,
+                            up: properties.collidesUp,
+                            right: properties.collidesRight,
+                            left: properties.collidesLeft,
+                        };
+                    });
+                }
+            });
+        });
         // the player will collide with this layer
-        detailsLayer.setCollisionByExclusion([-1]);
-        this.physics.add.collider(detailsLayer, this.player);
+        // detailsLayer.setCollisionByExclusion([-1]);
+        // this.physics.add.collider(detailsLayer, this.player);
 
         // set the boundaries of our game world
         this.physics.world.bounds.width = detailsLayer.width;
@@ -95,7 +130,8 @@ class GameScene extends Scene {
         } else if (this.cursors.right.isDown) {
             this.player.body.setVelocityX(200);
         }
-        if ((this.cursors.space.isDown || this.cursors.up.isDown) && this.player.body.onFloor()) {
+        if ((this.cursors.space.isDown || this.cursors.up.isDown)) {
+            console.log('jump');
             this.player.body.setVelocityY(-270);
         }
     }

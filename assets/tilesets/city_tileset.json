@@ -1,14 +1,75 @@
-{ "columns":20,
- "image":"city_tileset.png",
- "imageheight":320,
- "imagewidth":320,
- "margin":0,
- "name":"city_tileset",
- "spacing":0,
- "tilecount":400,
- "tiledversion":"1.4.1",
- "tileheight":16,
- "tilewidth":16,
- "type":"tileset",
- "version":1.4
+{
+    "columns": 20,
+    "editorsettings": {
+        "export": {
+            "format": "",
+            "target": "."
+        }
+    },
+    "image": "city_tileset.png",
+    "imageheight": 320,
+    "imagewidth": 320,
+    "margin": 0,
+    "name": "city_tileset",
+    "spacing": 0,
+    "tilecount": 400,
+    "tiledversion": "1.4.1",
+    "tileheight": 16,
+    "tiles": [
+        {
+            "id": 120,
+            "objectgroup": {
+                "draworder": "index",
+                "id": 3,
+                "name": "",
+                "objects": [
+                    {
+                        "height": 5,
+                        "id": 7,
+                        "name": "",
+                        "rotation": 0,
+                        "type": "",
+                        "visible": true,
+                        "width": 14,
+                        "x": 2,
+                        "y": 11
+                    }
+                ],
+                "opacity": 1,
+                "type": "objectgroup",
+                "visible": true,
+                "x": 0,
+                "y": 0
+            }
+        },
+        {
+            "id": 121,
+            "objectgroup": {
+                "draworder": "index",
+                "id": 2,
+                "name": "",
+                "objects": [
+                    {
+                        "height": 5,
+                        "id": 1,
+                        "name": "",
+                        "rotation": 0,
+                        "type": "",
+                        "visible": true,
+                        "width": 16,
+                        "x": 0,
+                        "y": 11
+                    }
+                ],
+                "opacity": 1,
+                "type": "objectgroup",
+                "visible": true,
+                "x": 0,
+                "y": 0
+            }
+        }
+    ],
+    "tilewidth": 16,
+    "type": "tileset",
+    "version": 1.4
 }
