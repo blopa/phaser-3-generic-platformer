@@ -45,7 +45,14 @@ class GameScene extends Scene {
         const map = this.make.tilemap({ key: 'map_03' });
 
         // tiles for the ground layer
-        const groundTiles = map.addTilesetImage('tileset', 'tilesetImage');
+        const groundTiles = map.addTilesetImage(
+            'tileset',
+            'tilesetImage',
+            16,
+            16,
+            1,
+            2
+        );
         // create the ground layer
         const backgroundLayer = map.createDynamicLayer('background', groundTiles, 0, 0);
         const groundLayer = map.createDynamicLayer('details', groundTiles, 0, 0);

@@ -15,9 +15,9 @@ class SplashScene extends Scene {
         this.load.image('background', background);
 
         if (IS_DEV) {
-            this.load.image('tilesetImage', 'assets/stages/debug_tileset.png');
+            this.load.image('tilesetImage', 'assets/tilesets/debug_tileset.png');
         } else {
-            this.load.image('tilesetImage', 'assets/stages/tileset.png');
+            this.load.image('tilesetImage', 'assets/tilesets/tileset.png');
         }
 
         // Stages

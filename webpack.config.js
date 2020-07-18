@@ -7,6 +7,7 @@ const BrowserSyncPlugin = require('browser-sync-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { promises: fs } = require('fs');
 const WebpackFreeTexPacker = require('webpack-free-tex-packer');
+const { extrudeTilesetToImage } = require('tile-extruder');
 const packageJson = require('./package.json');
 
 // PATHS
@@ -15,24 +16,32 @@ const IMAGE_DIR = path.resolve(__dirname, 'assets/images');
 const BUILD_PATH = path.resolve(__dirname, 'dist/build');
 const DIST_PATH = path.resolve(__dirname, 'dist');
 const STAGES_PATH = path.resolve(__dirname, 'assets/stages');
+const TILESETS_PATH = path.resolve(__dirname, 'assets/tilesets');
 const SPRITES_PATH = path.resolve(__dirname, 'assets/atlas_sprites');
 
 module.exports = async (env = {}) => {
     const stageFiles = await fs.readdir(STAGES_PATH);
+    const tilesetFiles = await fs.readdir(TILESETS_PATH);
+    const tilesetImageFiles = tilesetFiles
+        .filter((tilesetFile) => ['png', 'jpg', 'svg', 'gif', 'webp'].includes(tilesetFile.split('.')[1]));
     const spritesFolders = await fs.readdir(SPRITES_PATH);
 
     const texPackerPlugin = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const spritesFolder of spritesFolders) {
         // eslint-disable-next-line no-await-in-loop
-        const spritesFiles = await fs.readdir(path.resolve(__dirname, `assets/atlas_sprites/${spritesFolder}`));
+        // const spritesFiles = await fs.readdir(path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}`));
+        // const squareRoot = Math.sqrt(spritesFiles.length + 1);
         texPackerPlugin.push(
             new WebpackFreeTexPacker(
-                spritesFiles.map((spritesFile) =>
-                    path.resolve(__dirname, `assets/atlas_sprites/${spritesFolder}/${spritesFile}`)),
-                // path.resolve(__dirname, `assets/atlas_sprites/${spritesFolder}`),
+                // spritesFiles.map((spritesFile) =>
+                //     path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}/${spritesFile}`)),
+                path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}`),
                 '../assets/atlases',
                 {
+                    // width: Math.ceil(squareRoot) * 32,
+                    // height: Math.floor(squareRoot) * 32,
+                    // height: 32,
                     textureName: spritesFolder,
                     fixedSize: false,
                     padding: 0,
@@ -41,9 +50,24 @@ module.exports = async (env = {}) => {
                     allowTrim: true,
                     exporter: 'Phaser3',
                     removeFileExtension: true,
-                    prependFolderName: true,
+                    prependFolderName: false,
                 }
             )
+        );
+    }
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const tilesetFile of tilesetImageFiles) {
+        // eslint-disable-next-line no-await-in-loop
+        await extrudeTilesetToImage(
+            16,
+            16,
+            `${TILESETS_PATH}/${tilesetFile}`,
+            `${DIST_PATH}/assets/tilesets/${tilesetFile}`,
+            {
+                margin: 0,
+                spacing: 0,
+            }
         );
     }
 
