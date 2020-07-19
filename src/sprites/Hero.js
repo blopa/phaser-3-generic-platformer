@@ -44,6 +44,7 @@ class Hero extends GameObjects.Sprite {
             a: A,
             d: D,
         });
+        this.jumptimer = 0;
     }
 
     createAnimations = () => {
@@ -174,9 +175,29 @@ class Hero extends GameObjects.Sprite {
                 Input.Keyboard.JustDown(this.controlKeys.up)
                 || Input.Keyboard.JustDown(this.controlKeys.w)
             )) {
+            // player is on the ground, so he is allowed to start a jump
+            this.jumptimer = 1;
             this.body.setVelocityY(-200);
             this.setAnimation('jump');
             willJump = true;
+        } else if (
+            this.jumptimer !== 0
+            && (
+                this.controlKeys.up.isDown
+                || this.controlKeys.w.isDown
+            )) {
+            // player is no longer on the ground, but is still holding the jump key
+            this.jumptimer += 1;
+            if (this.jumptimer > 8) {
+                // player has been holding jump for over 100 millliseconds, it's time to stop him
+                this.jumptimer = 0;
+            } else if (this.jumptimer > 7) {
+                // player is allowed to jump higher, not yet 600 milliseconds of jumping
+                this.body.setVelocityY(-200);
+            }
+        } else if (this.jumptimer !== 0) {
+            // reset this.jumptimer since the player is no longer holding the jump key
+            this.jumptimer = 0;
         }
 
         // Update the animation/texture based on the state of the player
