@@ -1,0 +1,82 @@
+{
+	"textures": [
+		{
+			"image": "",
+			"format": "RGBA8888",
+			"size": {
+				"w": 94,
+				"h": 47
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "enemy1_idle_02",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 40,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 3,
+						"w": 33,
+						"h": 45
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 33,
+						"h": 45
+					}
+				},
+				{
+					"filename": "enemy1_idle_03",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 40,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 3,
+						"w": 29,
+						"h": 45
+					},
+					"frame": {
+						"x": 36,
+						"y": 1,
+						"w": 29,
+						"h": 45
+					}
+				},
+				{
+					"filename": "enemy1_idle_01",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 40,
+						"h": 48
+					},
+					"spriteSourceSize": {
+						"x": 10,
+						"y": 5,
+						"w": 26,
+						"h": 41
+					},
+					"frame": {
+						"x": 67,
+						"y": 1,
+						"w": 26,
+						"h": 41
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://github.com/odrick/webpack-free-tex-packer",
+		"version": "0.3.1"
+	}
+}

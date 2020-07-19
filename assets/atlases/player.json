@@ -1,0 +1,649 @@
+{
+	"textures": [
+		{
+			"image": "",
+			"format": "RGBA8888",
+			"size": {
+				"w": 802,
+				"h": 34
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "player_attack_02",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 0,
+						"y": 0,
+						"w": 30,
+						"h": 32
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 30,
+						"h": 32
+					}
+				},
+				{
+					"filename": "player_jump_03",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 0,
+						"w": 26,
+						"h": 32
+					},
+					"frame": {
+						"x": 33,
+						"y": 1,
+						"w": 26,
+						"h": 32
+					}
+				},
+				{
+					"filename": "player_jump_06",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 1,
+						"w": 27,
+						"h": 31
+					},
+					"frame": {
+						"x": 61,
+						"y": 1,
+						"w": 27,
+						"h": 31
+					}
+				},
+				{
+					"filename": "player_walk_12",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 1,
+						"w": 19,
+						"h": 31
+					},
+					"frame": {
+						"x": 90,
+						"y": 1,
+						"w": 19,
+						"h": 31
+					}
+				},
+				{
+					"filename": "player_attack_04",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 2,
+						"w": 30,
+						"h": 30
+					},
+					"frame": {
+						"x": 111,
+						"y": 1,
+						"w": 30,
+						"h": 30
+					}
+				},
+				{
+					"filename": "player_jump_02",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 5,
+						"y": 2,
+						"w": 26,
+						"h": 30
+					},
+					"frame": {
+						"x": 143,
+						"y": 1,
+						"w": 26,
+						"h": 30
+					}
+				},
+				{
+					"filename": "player_walk_13",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 2,
+						"w": 21,
+						"h": 30
+					},
+					"frame": {
+						"x": 171,
+						"y": 1,
+						"w": 21,
+						"h": 30
+					}
+				},
+				{
+					"filename": "player_walk_04",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 2,
+						"w": 20,
+						"h": 30
+					},
+					"frame": {
+						"x": 194,
+						"y": 1,
+						"w": 20,
+						"h": 30
+					}
+				},
+				{
+					"filename": "player_walk_05",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 9,
+						"y": 2,
+						"w": 19,
+						"h": 30
+					},
+					"frame": {
+						"x": 216,
+						"y": 1,
+						"w": 19,
+						"h": 30
+					}
+				},
+				{
+					"filename": "player_walk_11",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 9,
+						"y": 2,
+						"w": 19,
+						"h": 30
+					},
+					"frame": {
+						"x": 237,
+						"y": 1,
+						"w": 19,
+						"h": 30
+					}
+				},
+				{
+					"filename": "player_idle_05",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 3,
+						"w": 28,
+						"h": 29
+					},
+					"frame": {
+						"x": 258,
+						"y": 1,
+						"w": 28,
+						"h": 29
+					}
+				},
+				{
+					"filename": "player_idle_06",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 3,
+						"w": 28,
+						"h": 29
+					},
+					"frame": {
+						"x": 288,
+						"y": 1,
+						"w": 28,
+						"h": 29
+					}
+				},
+				{
+					"filename": "player_attack_03",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 1,
+						"w": 27,
+						"h": 29
+					},
+					"frame": {
+						"x": 318,
+						"y": 1,
+						"w": 27,
+						"h": 29
+					}
+				},
+				{
+					"filename": "player_walk_07",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 3,
+						"w": 22,
+						"h": 29
+					},
+					"frame": {
+						"x": 347,
+						"y": 1,
+						"w": 22,
+						"h": 29
+					}
+				},
+				{
+					"filename": "player_walk_03",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 3,
+						"w": 21,
+						"h": 29
+					},
+					"frame": {
+						"x": 371,
+						"y": 1,
+						"w": 21,
+						"h": 29
+					}
+				},
+				{
+					"filename": "player_walk_10",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 3,
+						"w": 21,
+						"h": 29
+					},
+					"frame": {
+						"x": 394,
+						"y": 1,
+						"w": 21,
+						"h": 29
+					}
+				},
+				{
+					"filename": "player_walk_14",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 8,
+						"y": 3,
+						"w": 21,
+						"h": 29
+					},
+					"frame": {
+						"x": 417,
+						"y": 1,
+						"w": 21,
+						"h": 29
+					}
+				},
+				{
+					"filename": "player_walk_06",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 9,
+						"y": 3,
+						"w": 19,
+						"h": 29
+					},
+					"frame": {
+						"x": 440,
+						"y": 1,
+						"w": 19,
+						"h": 29
+					}
+				},
+				{
+					"filename": "player_idle_03",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 4,
+						"w": 28,
+						"h": 28
+					},
+					"frame": {
+						"x": 461,
+						"y": 1,
+						"w": 28,
+						"h": 28
+					}
+				},
+				{
+					"filename": "player_idle_04",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 1,
+						"y": 4,
+						"w": 28,
+						"h": 28
+					},
+					"frame": {
+						"x": 491,
+						"y": 1,
+						"w": 28,
+						"h": 28
+					}
+				},
+				{
+					"filename": "player_idle_01",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 4,
+						"w": 27,
+						"h": 28
+					},
+					"frame": {
+						"x": 521,
+						"y": 1,
+						"w": 27,
+						"h": 28
+					}
+				},
+				{
+					"filename": "player_jump_05",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 1,
+						"w": 27,
+						"h": 28
+					},
+					"frame": {
+						"x": 550,
+						"y": 1,
+						"w": 27,
+						"h": 28
+					}
+				},
+				{
+					"filename": "player_walk_01",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 4,
+						"w": 27,
+						"h": 28
+					},
+					"frame": {
+						"x": 579,
+						"y": 1,
+						"w": 27,
+						"h": 28
+					}
+				},
+				{
+					"filename": "player_walk_02",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 6,
+						"y": 4,
+						"w": 24,
+						"h": 28
+					},
+					"frame": {
+						"x": 608,
+						"y": 1,
+						"w": 24,
+						"h": 28
+					}
+				},
+				{
+					"filename": "player_walk_09",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 6,
+						"y": 4,
+						"w": 24,
+						"h": 28
+					},
+					"frame": {
+						"x": 634,
+						"y": 1,
+						"w": 24,
+						"h": 28
+					}
+				},
+				{
+					"filename": "player_walk_08",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 7,
+						"y": 4,
+						"w": 22,
+						"h": 28
+					},
+					"frame": {
+						"x": 660,
+						"y": 1,
+						"w": 22,
+						"h": 28
+					}
+				},
+				{
+					"filename": "player_attack_01",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 5,
+						"w": 28,
+						"h": 27
+					},
+					"frame": {
+						"x": 684,
+						"y": 1,
+						"w": 28,
+						"h": 27
+					}
+				},
+				{
+					"filename": "player_idle_02",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 2,
+						"y": 5,
+						"w": 28,
+						"h": 27
+					},
+					"frame": {
+						"x": 714,
+						"y": 1,
+						"w": 28,
+						"h": 27
+					}
+				},
+				{
+					"filename": "player_jump_01",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 3,
+						"y": 5,
+						"w": 28,
+						"h": 27
+					},
+					"frame": {
+						"x": 744,
+						"y": 1,
+						"w": 28,
+						"h": 27
+					}
+				},
+				{
+					"filename": "player_jump_04",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 32,
+						"h": 32
+					},
+					"spriteSourceSize": {
+						"x": 4,
+						"y": 1,
+						"w": 27,
+						"h": 24
+					},
+					"frame": {
+						"x": 774,
+						"y": 1,
+						"w": 27,
+						"h": 24
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://github.com/odrick/webpack-free-tex-packer",
+		"version": "0.3.1"
+	}
+}
