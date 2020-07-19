@@ -34,6 +34,8 @@ class GameScene extends Scene {
         const mapCustomColliders = getTilesetCustomColliders(this, testsLayer);
         this.physics.add.collider(testsLayer, this.player);
         this.physics.add.collider(mapCustomColliders, this.player);
+        // this.physics.world.addCollider(this.player, testsLayer);
+        // this.physics.world.addCollider(this.player, mapCustomColliders);
 
         // set the boundaries of our game world
         this.physics.world.bounds.width = detailsLayer.width;

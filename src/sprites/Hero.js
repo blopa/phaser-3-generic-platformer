@@ -1,5 +1,5 @@
-import { GameObjects } from 'phaser';
-import {handleSpriteMovement, isset} from '../utils/utils';
+import { GameObjects, Input } from 'phaser';
+import { handleSpriteMovement, isset } from '../utils/utils';
 
 class Hero extends GameObjects.Sprite {
     constructor({
@@ -14,6 +14,7 @@ class Hero extends GameObjects.Sprite {
         super(scene, x, y, asset, frame);
         this.setDepth(500);
         this.setOrigin(0, 1);
+        this.enablePhysics = enablePhysics;
 
         Object.assign(this, {
             handleSpriteMovement,
@@ -25,10 +26,22 @@ class Hero extends GameObjects.Sprite {
 
         if (enablePhysics) {
             scene.physics.add.existing(this);
+            this.body.setDrag(1000, 0);
+            this.body.setMaxVelocity(150, 400);
         }
 
         this.createAnimations();
         this.setAnimation('idle');
+
+        const { LEFT, RIGHT, UP, W, A, D } = Input.Keyboard.KeyCodes;
+        this.controlKeys = scene.input.keyboard.addKeys({
+            left: LEFT,
+            right: RIGHT,
+            up: UP,
+            w: W,
+            a: A,
+            d: D,
+        });
     }
 
     createAnimations = () => {
@@ -116,7 +129,7 @@ class Hero extends GameObjects.Sprite {
         }
     };
 
-    setAnimation = (animationName) => {
+    setAnimation = (animationName, ignoreIfPlaying = true) => {
         if (!isset(this.anims) || this.currentAnimationName === animationName) {
             return;
         }
@@ -125,25 +138,50 @@ class Hero extends GameObjects.Sprite {
         const animationKey = `${assetKey}_${animationName}`;
         this.currentAnimationName = animationName;
         this.currentAnimationKey = animationKey;
-        this.anims.play(animationKey);
+        this.anims.play(animationKey, ignoreIfPlaying);
     };
 
     update(time, delta) {
-        const cursors = this.scene.input.keyboard.createCursorKeys();
-
-        if (cursors.left.isDown) {
-            this.body.setVelocityX(-160);
-            this.setAnimation('walk');
-        } else if (cursors.right.isDown) {
-            this.body.setVelocityX(160);
-            this.setAnimation('walk');
-        } else {
-            this.body.setVelocityX(0);
-            this.setAnimation('idle');
+        if (!this.enablePhysics) {
+            return;
         }
 
-        if (cursors.up.isDown) { //  && this.body.touching.down
-            this.body.setVelocityY(-330);
+        const onGround = this.body.blocked.down || this.body.touching.down;
+        const acceleration = onGround ? 600 : 200;
+
+        // Apply horizontal acceleration when left/a or right/d are applied
+        if (this.controlKeys.left.isDown || this.controlKeys.a.isDown) {
+            this.body.setAccelerationX(-acceleration);
+            // No need to have a separate set of graphics for running to the left & to the right. Instead
+            // we can just mirror the this.body.
+            this.setFlipX(true);
+        } else if (this.controlKeys.right.isDown || this.controlKeys.d.isDown) {
+            this.body.setAccelerationX(acceleration);
+            this.setFlipX(false);
+        } else {
+            this.body.setAccelerationX(0);
+        }
+
+        // Only allow the player to jump if they are on the ground
+        let willJump = false;
+        if (
+            onGround
+            && (
+                Input.Keyboard.JustDown(this.controlKeys.up)
+                || Input.Keyboard.JustDown(this.controlKeys.w)
+            )) {
+            this.body.setVelocityY(-200);
+            this.setAnimation('jump');
+            willJump = true;
+        }
+
+        // Update the animation/texture based on the state of the player
+        if (!willJump && onGround) {
+            if (this.body.velocity.x !== 0) {
+                this.setAnimation('walk');
+            } else {
+                this.setAnimation('idle');
+            }
         }
     }
 }

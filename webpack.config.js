@@ -13,6 +13,7 @@ const packageJson = require('./package.json');
 
 const tileWidth = 16;
 const tileHeight = 16;
+const spritePadding = 1;
 
 // PATHS
 const MAIN_DIR = path.resolve(__dirname, '');
@@ -48,6 +49,7 @@ module.exports = async (env = {}) => {
                 spriteMaxHeight = height;
             }
         });
+
         texPackerPlugin.push(
             new WebpackFreeTexPacker(
                 // spritesFiles.map((spritesFile) =>
@@ -55,10 +57,10 @@ module.exports = async (env = {}) => {
                 path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}`),
                 '../assets/atlases',
                 {
-                    height: spriteMaxHeight,
+                    height: spriteMaxHeight + (spritePadding * 2),
                     textureName: spritesFolder,
                     fixedSize: false,
-                    padding: 0,
+                    padding: spritePadding,
                     allowRotation: false,
                     detectIdentical: true,
                     allowTrim: true,
