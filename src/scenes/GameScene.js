@@ -1,6 +1,5 @@
 import { Scene } from 'phaser';
-import { TILESET_HEIGHT, TILESET_WIDTH } from '../constants/constants';
-import {getTilesetCustomColliders} from "../utils/tilesets";
+import {createMapWithDynamicLayers, getMapObjectLayer, getTilesetCustomColliders} from '../utils/tilesets';
 
 class GameScene extends Scene {
     constructor() {
@@ -39,26 +38,15 @@ class GameScene extends Scene {
         this.player.anims.play('player_idle');
 
         // load the map
-        const map = this.make.tilemap({ key: 'city_01' });
-
-        // tiles for the ground layer
-        const groundTiles = map.addTilesetImage(
+        const { map, layers } = createMapWithDynamicLayers(
+            this,
+            'city_01',
             'city_tileset',
-            'city_tileset',
-            TILESET_WIDTH,
-            TILESET_HEIGHT,
-            1,
-            2
+            'city_tileset'
         );
-        console.log({ groundTiles });
-        // create the ground layer
-        const backgroundLayer1 = map.createDynamicLayer('background', groundTiles, 0, 0);
-        const backgroundLayer2 = map.createDynamicLayer('background2', groundTiles, 0, 0);
-        const detailsLayer = map.createDynamicLayer('details', groundTiles, 0, 0);
-        const detailsLayer2 = map.createDynamicLayer('details2', groundTiles, 0, 0);
-
-        const testsLayer = map.createDynamicLayer('tests', groundTiles, 0, 0);
-        const mapCustomColliders = getTilesetCustomColliders(testsLayer, this);
+        const testsLayer = layers.tests;
+        const detailsLayer = layers.details;
+        const mapCustomColliders = getTilesetCustomColliders(this, testsLayer);
         this.physics.add.collider(testsLayer, this.player);
         this.physics.add.collider(mapCustomColliders, this.player);
 
@@ -74,7 +62,7 @@ class GameScene extends Scene {
         // set background color, so the sky is not black
         this.cameras.main.setBackgroundColor('#ccccff');
 
-        const dataLayer = map.getObjectLayer('data');
+        const dataLayer = getMapObjectLayer(map, 'data');
         dataLayer.objects.forEach((data) => {
             const { x, y, name, height, width } = data;
             if (name === 'hero') {

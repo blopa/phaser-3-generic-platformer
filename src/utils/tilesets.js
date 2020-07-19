@@ -1,9 +1,10 @@
 /* globals IS_DEV */
-import { GameObjects } from 'phaser';
+import { GameObjects, Tilemaps } from 'phaser';
 import { TILESET_HEIGHT, TILESET_WIDTH } from '../constants/constants';
 import GameGroup from '../sprites/Prefabs/GameGroup';
+import { isset } from './utils';
 
-export const getTilesetCustomColliders = (tilesetLayer, scene) => {
+export const getTilesetCustomColliders = (scene, tilesetLayer) => {
     const customColliders = [];
     tilesetLayer.tilemap.layer.data.forEach((tiles) => {
         tiles.forEach((tile) => {
@@ -68,3 +69,46 @@ export const getTilesetCustomColliders = (tilesetLayer, scene) => {
         name: tilesetLayer.tileset[0].name,
     });
 };
+
+export const createMapWithDynamicLayers = (
+    scene,
+    tilesetKey,
+    tilesetName,
+    tilesetImageKey,
+    layerNames = []
+) => {
+    const map = makeTilemap(scene, tilesetKey);
+    const tileset = createMapTileset(map, tilesetName, tilesetImageKey);
+    const layers = [];
+    if (isset(layerNames)) {
+        layerNames.forEach((layerName) => {
+            layers[layerName] = createMapDynamicLayer(map, layerName, tileset);
+        });
+    } else {
+        map.layers.forEach((layer) => {
+            layers[layer.name] = createMapDynamicLayer(map, layer.name, tileset);
+        });
+    }
+
+    return {
+        map,
+        layers,
+    };
+};
+
+export const getMapObjectLayer = (map, layerName) => map.getObjectLayer(layerName);
+
+// same as scene.make.tilemap({ key: 'key' })
+const makeTilemap = (scene, tilesetKey) => Tilemaps.ParseToTilemap(scene, tilesetKey);
+
+const createMapDynamicLayer = (map, layerName, tileset, x = 0, y = 0) =>
+    map.createDynamicLayer(layerName, tileset, x, y);
+
+const createMapTileset = (map, tilesetName, tilesetImageKey) => map.addTilesetImage(
+    tilesetName,
+    tilesetImageKey,
+    TILESET_WIDTH,
+    TILESET_HEIGHT,
+    1,
+    2
+);
