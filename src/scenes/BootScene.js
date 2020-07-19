@@ -6,7 +6,7 @@ class BootScene extends Scene {
     }
 
     create() {
-        this.scene.start('SplashScene');
+        this.scene.start('LoadAssetsScene');
     }
 }
 

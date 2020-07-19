@@ -1,13 +1,20 @@
+/* globals IS_DEV */
 import { Game as PhaserGame } from 'phaser';
 
 import BootScene from './scenes/BootScene';
-import SplashScene from './scenes/SplashScene';
+import LoadAssetsScene from './scenes/LoadAssetsScene';
 import GameScene from './scenes/GameScene';
+import MainMenuScene from './scenes/MainMenuScene';
 
 import config from './config';
 
 const gameConfig = Object.assign(config, {
-    scene: [BootScene, SplashScene, GameScene],
+    scene: [
+        BootScene,
+        LoadAssetsScene,
+        GameScene,
+        MainMenuScene,
+    ],
 });
 
 class Game extends PhaserGame {
@@ -16,4 +23,8 @@ class Game extends PhaserGame {
     }
 }
 
-window.game = new Game();
+const phaserGame = new Game();
+
+if (IS_DEV) {
+    window.PHASER_GAME = phaserGame;
+}

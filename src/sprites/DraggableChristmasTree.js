@@ -1,5 +1,5 @@
 import { GameObjects } from 'phaser';
-import { setSpriteDraggable } from '../utils';
+import { setSpriteDraggable } from '../utils/utils';
 
 class DraggableChristmasTree extends GameObjects.Sprite {
     constructor({ scene, x, y, asset, frame }) {

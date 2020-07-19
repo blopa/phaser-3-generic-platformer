@@ -85,7 +85,7 @@ module.exports = async (env = {}) => {
         );
     }
 
-    const STAGES = JSON.stringify(
+    const GAME_STAGES = JSON.stringify(
         stageFiles
             .filter((stage) => stage.split('.')[1] === 'json')
             .map((stage) => stage.split('.')[0])
@@ -113,11 +113,12 @@ module.exports = async (env = {}) => {
                 path: './local.env', // load this now instead of the ones in '.env'
             }),
             new webpack.DefinePlugin({
-                CANVAS_RENDERER: JSON.stringify(true),
-                WEBGL_RENDERER: JSON.stringify(true),
                 IS_DEV: JSON.stringify(true),
-                VERSION: JSON.stringify(packageJson.version),
-                STAGES,
+                GAME_VERSION: JSON.stringify(packageJson.version),
+                GAME_TILESET_IMAGES: JSON.stringify(tilesetImageFiles),
+                GAME_TILESET_WIDTH: JSON.stringify(tileWidth),
+                GAME_TILESET_HEIGHT: JSON.stringify(tileHeight),
+                GAME_STAGES,
             }),
             new HtmlWebpackPlugin({
                 hash: true,

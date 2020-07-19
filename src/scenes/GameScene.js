@@ -1,9 +1,5 @@
-/* globals IS_DEV */
 import { Scene } from 'phaser';
-import ChristmasTree from '../sprites/ChristmasTree';
-import Background from '../sprites/Background';
-import DraggableChristmasTree from '../sprites/DraggableChristmasTree';
-import MovableChristmasTree from '../sprites/MovableChristmasTree';
+import { TILESET_HEIGHT, TILESET_WIDTH } from '../constants/constants';
 
 class GameScene extends Scene {
     constructor() {
@@ -47,19 +43,22 @@ class GameScene extends Scene {
         // tiles for the ground layer
         const groundTiles = map.addTilesetImage(
             'city_tileset',
-            'tilesetImage',
-            16,
-            16,
+            'city_tileset',
+            TILESET_WIDTH,
+            TILESET_HEIGHT,
             1,
             2
         );
+        console.log({ groundTiles });
         // create the ground layer
         const backgroundLayer1 = map.createDynamicLayer('background', groundTiles, 0, 0);
         const backgroundLayer2 = map.createDynamicLayer('background2', groundTiles, 0, 0);
         const detailsLayer = map.createDynamicLayer('details', groundTiles, 0, 0);
         const detailsLayer2 = map.createDynamicLayer('details2', groundTiles, 0, 0);
+
         const testsLayer = map.createDynamicLayer('tests', groundTiles, 0, 0);
         this.wallGroup = this.physics.add.group();
+        this.physics.add.collider(testsLayer, this.player);
         testsLayer.tilemap.layer.data.forEach((tiles) => {
             tiles.forEach((tile) => {
                 const { index } = tile;
@@ -68,9 +67,21 @@ class GameScene extends Scene {
                     const { objects } = objectgroup;
                     objects.forEach((objectData) => {
                         const { height, width, x, y } = objectData;
+                        const properties = testsLayer.tileset[0].tileProperties[index - 1];
+                        const {
+                            collidesLeft,
+                            collidesRight,
+                            collidesUp,
+                            collidesDown,
+                        } = properties;
+                        if (height === TILESET_HEIGHT && width === TILESET_WIDTH) {
+                            tile.setCollision(collidesLeft, collidesRight, collidesUp, collidesDown);
+                            return;
+                        }
+
                         const wall = this.add.rectangle(
-                            (tile.x * 16) + x,
-                            (tile.y * 16) + y,
+                            (tile.x * TILESET_WIDTH) + x,
+                            (tile.y * TILESET_HEIGHT) + y,
                             width,
                             height
                         )
@@ -81,14 +92,13 @@ class GameScene extends Scene {
                         wall.body.setAllowGravity(false);
                         wall.body.setImmovable(true);
                         this.physics.add.collider(this.player, wall);
-                        const properties = testsLayer.tileset[0].tileProperties[index - 1];
                         if (properties) {
                             wall.body.checkCollision = {
                                 ...wall.body.checkCollision,
-                                down: properties.collidesDown,
-                                up: properties.collidesUp,
-                                right: properties.collidesRight,
-                                left: properties.collidesLeft,
+                                left: collidesLeft,
+                                right: collidesRight,
+                                up: collidesUp,
+                                down: collidesDown,
                             };
                         }
                     });
