@@ -1,7 +1,7 @@
 /* globals IS_DEV */
-import { Geom } from 'phaser';
+import { GameObjects } from 'phaser';
 import { TILESET_HEIGHT, TILESET_WIDTH } from '../constants/constants';
-import GameGroup from "../sprites/Prefabs/GameGroup";
+import GameGroup from '../sprites/Prefabs/GameGroup';
 
 export const getTilesetCustomColliders = (tilesetLayer, scene) => {
     const customColliders = [];
@@ -31,7 +31,8 @@ export const getTilesetCustomColliders = (tilesetLayer, scene) => {
                         return;
                     }
 
-                    const customCollider = new Geom.Rectangle(
+                    const customCollider = new GameObjects.Rectangle(
+                        scene,
                         (tile.x * TILESET_WIDTH) + x,
                         (tile.y * TILESET_HEIGHT) + y,
                         width,

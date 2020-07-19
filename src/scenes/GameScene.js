@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import { TILESET_HEIGHT, TILESET_WIDTH } from '../constants/constants';
+import {getTilesetCustomColliders} from "../utils/tilesets";
 
 class GameScene extends Scene {
     constructor() {
@@ -57,57 +58,9 @@ class GameScene extends Scene {
         const detailsLayer2 = map.createDynamicLayer('details2', groundTiles, 0, 0);
 
         const testsLayer = map.createDynamicLayer('tests', groundTiles, 0, 0);
-        this.wallGroup = this.physics.add.group();
+        const mapCustomColliders = getTilesetCustomColliders(testsLayer, this);
         this.physics.add.collider(testsLayer, this.player);
-        testsLayer.tilemap.layer.data.forEach((tiles) => {
-            tiles.forEach((tile) => {
-                const { index } = tile;
-                if (index !== -1 && testsLayer.tileset[0].tileData[index - 1]) {
-                    const { objectgroup } = testsLayer.tileset[0].tileData[index - 1];
-                    const { objects } = objectgroup;
-                    objects.forEach((objectData) => {
-                        const { height, width, x, y } = objectData;
-                        const properties = testsLayer.tileset[0].tileProperties[index - 1];
-                        const {
-                            collidesLeft,
-                            collidesRight,
-                            collidesUp,
-                            collidesDown,
-                        } = properties;
-                        if (height === TILESET_HEIGHT && width === TILESET_WIDTH) {
-                            tile.setCollision(collidesLeft, collidesRight, collidesUp, collidesDown);
-                            return;
-                        }
-
-                        const wall = this.add.rectangle(
-                            (tile.x * TILESET_WIDTH) + x,
-                            (tile.y * TILESET_HEIGHT) + y,
-                            width,
-                            height
-                        )
-                            .setOrigin(0, 0)
-                            .setFillStyle(0x741B47);
-                        this.physics.add.existing(wall);
-                        this.wallGroup.add(wall);
-                        wall.body.setAllowGravity(false);
-                        wall.body.setImmovable(true);
-                        this.physics.add.collider(this.player, wall);
-                        if (properties) {
-                            wall.body.checkCollision = {
-                                ...wall.body.checkCollision,
-                                left: collidesLeft,
-                                right: collidesRight,
-                                up: collidesUp,
-                                down: collidesDown,
-                            };
-                        }
-                    });
-                }
-            });
-        });
-        // the player will collide with this layer
-        // detailsLayer.setCollisionByExclusion([-1]);
-        // this.physics.add.collider(detailsLayer, this.player);
+        this.physics.add.collider(mapCustomColliders, this.player);
 
         // set the boundaries of our game world
         this.physics.world.bounds.width = detailsLayer.width;
