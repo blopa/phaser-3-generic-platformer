@@ -1,5 +1,5 @@
 import { GameObjects, Input } from 'phaser';
-import { handleSpriteMovement, isset } from '../utils/utils';
+import { isset } from '../utils/utils';
 
 class Hero extends GameObjects.Sprite {
     constructor({
@@ -16,10 +16,6 @@ class Hero extends GameObjects.Sprite {
         this.setOrigin(0, 1);
         this.enablePhysics = enablePhysics;
 
-        Object.assign(this, {
-            handleSpriteMovement,
-        });
-
         if (addToScene) {
             scene.add.existing(this);
         }
@@ -33,10 +29,19 @@ class Hero extends GameObjects.Sprite {
             this.body.setBounce(0, 0);
         }
 
+        // this.attackFrameRate = 12;
+        // this.attackDuration = 1000 / (this.attackFrameRate / 4);
+        // d = 1000 / (f / 4)
+        // d * (f / 4) = 1000
+        // f / 4 = 1000 / d
+        // (f * d) / (4 * d) = 4000 / (4 * d)
+        // f * d = 4 * 1000
+        // f = (4 * 1000) / d
+        this.attackDuration = 300;
         this.createAnimations();
         this.setAnimation('idle');
 
-        const { LEFT, RIGHT, UP, W, A, D } = Input.Keyboard.KeyCodes;
+        const { LEFT, RIGHT, UP, W, A, D, SPACE } = Input.Keyboard.KeyCodes;
         this.controlKeys = scene.input.keyboard.addKeys({
             left: LEFT,
             right: RIGHT,
@@ -44,8 +49,10 @@ class Hero extends GameObjects.Sprite {
             w: W,
             a: A,
             d: D,
+            space: SPACE,
         });
         this.jumptimer = 0;
+        this.isAttacking = false;
     }
 
     createAnimations = () => {
@@ -124,9 +131,11 @@ class Hero extends GameObjects.Sprite {
                         'player_attack_02',
                         'player_attack_03',
                         'player_attack_04',
+                        'player_attack_04',
                     ],
                 }),
-                frameRate: 12,
+                // frameRate: this.attackFrameRate,
+                frameRate: (5 * 1000) / this.attackDuration,
                 // yoyo: true,
                 repeat: 0,
             });
@@ -147,6 +156,10 @@ class Hero extends GameObjects.Sprite {
 
     update(time, delta) {
         if (!this.enablePhysics) {
+            return;
+        }
+
+        if (this.isAttacking) {
             return;
         }
 
@@ -180,6 +193,7 @@ class Hero extends GameObjects.Sprite {
             this.jumptimer = 1;
             this.body.setVelocityY(-200);
             this.setAnimation('jump');
+            this.body.setOffset(8, 2);
             willJump = true;
         } else if (
             this.jumptimer !== 0
@@ -203,11 +217,31 @@ class Hero extends GameObjects.Sprite {
 
         // Update the animation/texture based on the state of the player
         if (!willJump && onGround) {
+            this.body.setVelocityY(0);
+            this.body.setOffset(8, 4);
             if (this.body.velocity.x !== 0) {
                 this.setAnimation('walk');
             } else {
                 this.setAnimation('idle');
             }
+        }
+
+        // set player falling animation
+        if (this.body.velocity.y > 0) {
+            this.setFrame('player_jump_05');
+        }
+
+        // handle player attacking
+        if (onGround && Input.Keyboard.JustDown(this.controlKeys.space)) {
+            this.setAnimation('attack');
+            this.body.setVelocityX(0);
+            this.isAttacking = true;
+            this.scene.time.delayedCall(
+                this.attackDuration,
+                () => {
+                    this.isAttacking = false;
+                }
+            );
         }
     }
 }
