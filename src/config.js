@@ -14,10 +14,10 @@ export default {
     autoRound: false,
     pixelArt: true,
     physics: {
+        // https://rexrainbow.github.io/phaser3-rex-notes/docs/site/arcade-world/#configuration
         default: 'arcade',
         arcade: {
-            gravity: { y: 500 },
-            enableBody: true,
+            gravity: { y: 700 },
             debug: IS_DEV,
         },
     },

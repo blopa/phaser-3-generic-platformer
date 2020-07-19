@@ -30,6 +30,7 @@ class Hero extends GameObjects.Sprite {
             this.body.setMaxVelocity(150, 400);
             this.body.setSize(18, 28);
             this.body.setOffset(8, 4);
+            this.body.setBounce(0, 0);
         }
 
         this.createAnimations();
@@ -89,7 +90,7 @@ class Hero extends GameObjects.Sprite {
                         'player_walk_14',
                     ],
                 }),
-                frameRate: 28,
+                frameRate: 18,
                 // yoyo: true,
                 repeat: -1,
             });
