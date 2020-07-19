@@ -28,6 +28,8 @@ class Hero extends GameObjects.Sprite {
             scene.physics.add.existing(this);
             this.body.setDrag(1000, 0);
             this.body.setMaxVelocity(150, 400);
+            this.body.setSize(18, 28);
+            this.body.setOffset(8, 4);
         }
 
         this.createAnimations();
@@ -155,9 +157,11 @@ class Hero extends GameObjects.Sprite {
             // No need to have a separate set of graphics for running to the left & to the right. Instead
             // we can just mirror the this.body.
             this.setFlipX(true);
+            this.body.setOffset(6, 4);
         } else if (this.controlKeys.right.isDown || this.controlKeys.d.isDown) {
             this.body.setAccelerationX(acceleration);
             this.setFlipX(false);
+            this.body.setOffset(8, 4);
         } else {
             this.body.setAccelerationX(0);
         }
