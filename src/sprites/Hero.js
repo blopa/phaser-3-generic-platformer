@@ -160,6 +160,8 @@ class Hero extends GameObjects.Sprite {
         }
 
         if (this.isAttacking) {
+            // consumes any attack button to ignore it
+            Input.Keyboard.JustDown(this.controlKeys.space);
             return;
         }
 
@@ -184,11 +186,11 @@ class Hero extends GameObjects.Sprite {
         // Only allow the player to jump if they are on the ground
         let willJump = false;
         if (
-            onGround
-            && (
-                Input.Keyboard.JustDown(this.controlKeys.up)
-                || Input.Keyboard.JustDown(this.controlKeys.w)
-            )) {
+            // The order here matter because we check if the button was pressed, and that consumes the button
+            // this will avoid jumping right after hitting the ground
+            (Input.Keyboard.JustDown(this.controlKeys.up) || Input.Keyboard.JustDown(this.controlKeys.w))
+            && onGround
+        ) {
             // player is on the ground, so he is allowed to start a jump
             this.jumptimer = 1;
             this.body.setVelocityY(-200);
