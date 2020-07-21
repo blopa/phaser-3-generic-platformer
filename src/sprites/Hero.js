@@ -140,6 +140,39 @@ class Hero extends GameObjects.Sprite {
                 repeat: 0,
             });
         }
+
+        if (!this.scene.anims.exists(`${assetKey}_start_run`)) {
+            this.scene.anims.create({
+                key: `${assetKey}_start_run`,
+                frames: this.scene.anims.generateFrameNames(assetKey, {
+                    frames: [
+                        'player_start_run_01',
+                        'player_start_run_02',
+                        'player_start_run_03',
+                        'player_start_run_04',
+                        'player_start_run_05',
+                        'player_start_run_06',
+                    ],
+                }),
+                frameRate: 12,
+                repeat: 0,
+            });
+        }
+
+        if (!this.scene.anims.exists(`${assetKey}_run`)) {
+            this.scene.anims.create({
+                key: `${assetKey}_run`,
+                frames: this.scene.anims.generateFrameNames(assetKey, {
+                    frames: [
+                        'player_run_01',
+                        'player_run_02',
+                        'player_run_03',
+                    ],
+                }),
+                frameRate: 6,
+                repeat: -1,
+            });
+        }
     };
 
     setAnimation = (animationName, ignoreIfPlaying = true) => {

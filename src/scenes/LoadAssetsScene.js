@@ -25,6 +25,8 @@ class LoadAssetsScene extends Scene {
         });
 
         this.load.atlas('player', 'assets/atlases/player.png', 'assets/atlases/player.json');
+        this.load.atlas('enemy1', 'assets/atlases/enemy1.png', 'assets/atlases/enemy1.json');
+        this.load.atlas('enemy2', 'assets/atlases/enemy2.png', 'assets/atlases/enemy2.json');
     }
 
     create() {
