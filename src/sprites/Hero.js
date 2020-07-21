@@ -196,12 +196,13 @@ class Hero extends GameObjects.Sprite {
     };
 
     setHeroState(heroState) {
+        console.log(heroState);
         this.heroState = heroState;
     }
 
     update(time, delta) {
         // console.log(this.heroState);
-        console.log(this.heroState, this.jumpTimer);
+        // console.log(this.runTimer);
         // this.handleControls();
         this.handleHeroState();
         this.handleHeroMovement();
@@ -213,6 +214,8 @@ class Hero extends GameObjects.Sprite {
         const isRightDown = this.controlKeys.right.isDown || this.controlKeys.d.isDown;
         const isLeftDown = this.controlKeys.left.isDown || this.controlKeys.a.isDown;
         const isUpDown = this.controlKeys.up.isDown || this.controlKeys.w.isDown;
+        const pressedRight = Input.Keyboard.JustDown(this.controlKeys.right);
+        const pressedLeft = Input.Keyboard.JustDown(this.controlKeys.left);
         const isJumping = [
             'JUMPING_START',
             'BOOSTING_JUMP',
@@ -242,17 +245,15 @@ class Hero extends GameObjects.Sprite {
         // Handle hero running
         if (!isJumping) {
             if (this.runTimer <= 0) {
-                const pressedRunRight = Input.Keyboard.JustUp(this.controlKeys.right);
-                const pressedRunLeft = Input.Keyboard.JustUp(this.controlKeys.left);
-                if (pressedRunRight || pressedRunLeft) {
-                    this.pressedRunRight = pressedRunRight;
-                    this.pressedRunLeft = pressedRunLeft;
+                if (pressedRight || pressedLeft) {
+                    this.pressedRunRight = pressedRight;
+                    this.pressedRunLeft = pressedLeft;
                     this.runTimer = 1;
                 }
             } else if (this.runTimer <= 10) {
-                if (this.pressedRunRight && isRightDown) {
+                if (this.pressedRunRight && isRightDown && pressedRight) {
                     this.setHeroState('RUNNING_RIGHT');
-                } else if (this.pressedRunLeft && isLeftDown) {
+                } else if (this.pressedRunLeft && isLeftDown && pressedLeft) {
                     this.setHeroState('RUNNING_LEFT');
                 }
             } else {
@@ -260,10 +261,23 @@ class Hero extends GameObjects.Sprite {
                 this.pressedRunRight = false;
                 this.pressedRunLeft = false;
             }
+
+            if (this.runTimer > 0) {
+                this.runTimer += 1;
+            }
+        }
+
+        const isRunning = ['RUNNING_RIGHT', 'RUNNING_LEFT'].includes(this.heroState);
+        if (isRunning) {
+            if (isRightDown) {
+                this.setHeroState('RUNNING_RIGHT');
+            } else if (isLeftDown) {
+                this.setHeroState('RUNNING_LEFT');
+            }
         }
 
         // Handle hero walking
-        if (!isJumping) {
+        if (!isJumping && !isRunning) {
             if (isRightDown) {
                 this.setHeroState('WALKING_RIGHT');
             } else if (isLeftDown) {
