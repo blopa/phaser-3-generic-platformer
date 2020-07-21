@@ -1,3 +1,4 @@
+/* globals IS_DEV */
 import { GameObjects, Input } from 'phaser';
 import { isset } from '../utils/utils';
 
@@ -18,6 +19,7 @@ class Hero extends GameObjects.Sprite {
         // Properties
         this.enablePhysics = enablePhysics;
         this.attackDuration = 300;
+        this.startRunDuration = 350;
         this.jumpTimer = 0;
         this.runTimer = 0;
         this.stopRunTimer = 0;
@@ -40,16 +42,14 @@ class Hero extends GameObjects.Sprite {
             this.body.setBounce(0, 0);
         }
 
-        // this.attackFrameRate = 12;
-        // this.attackDuration = 1000 / (this.attackFrameRate / 4);
-        // d = 1000 / (f / 4)
-        // d * (f / 4) = 1000
-        // f / 4 = 1000 / d
-        // (f * d) / (4 * d) = 4000 / (4 * d)
-        // f * d = 4 * 1000
-        // f = (4 * 1000) / d
         this.createAnimations();
         this.setAnimation('idle');
+
+        if (IS_DEV) {
+            this.debugText = this.scene.add.text(0, 0, '');
+            this.debugText.setDepth(700);
+            this.debugText.setFontSize(12);
+        }
 
         const { LEFT, RIGHT, UP, W, A, D, SPACE } = Input.Keyboard.KeyCodes;
         this.controlKeys = scene.input.keyboard.addKeys({
@@ -142,7 +142,6 @@ class Hero extends GameObjects.Sprite {
                         'player_attack_04',
                     ],
                 }),
-                // frameRate: this.attackFrameRate,
                 frameRate: (5 * 1000) / this.attackDuration,
                 // yoyo: true,
                 repeat: 0,
@@ -162,7 +161,7 @@ class Hero extends GameObjects.Sprite {
                         'player_start_run_06',
                     ],
                 }),
-                frameRate: 12,
+                frameRate: (5 * 1000) / this.startRunDuration,
                 repeat: 0,
             });
         }
@@ -196,11 +195,16 @@ class Hero extends GameObjects.Sprite {
     };
 
     setHeroState(heroState) {
-        console.log(heroState);
+        if (IS_DEV && this.heroState !== heroState) {
+            console.log(heroState);
+            this.debugText.setText(heroState);
+        }
         this.heroState = heroState;
     }
 
     update(time, delta) {
+        this.debugText.setX(this.x);
+        this.debugText.setY(this.y - 50);
         // console.log(this.heroState);
         // console.log(this.runTimer);
         // this.handleControls();
@@ -231,6 +235,8 @@ class Hero extends GameObjects.Sprite {
         // Handle hero idle
         if (heroOnGround && !isRightDown && !isLeftDown) {
             if ([
+                'RUNNING_RIGHT_START',
+                'RUNNING_LEFT_START',
                 'RUNNING_RIGHT',
                 'RUNNING_LEFT',
                 'WALKING_RIGHT',
@@ -252,9 +258,21 @@ class Hero extends GameObjects.Sprite {
                 }
             } else if (this.runTimer <= 10) {
                 if (this.pressedRunRight && isRightDown && pressedRight) {
-                    this.setHeroState('RUNNING_RIGHT');
+                    this.setHeroState('RUNNING_RIGHT_START');
+                    this.scene.time.delayedCall(
+                        this.startRunDuration,
+                        () => {
+                            this.setHeroState('RUNNING_RIGHT');
+                        }
+                    );
                 } else if (this.pressedRunLeft && isLeftDown && pressedLeft) {
-                    this.setHeroState('RUNNING_LEFT');
+                    this.setHeroState('RUNNING_LEFT_START');
+                    this.scene.time.delayedCall(
+                        this.startRunDuration,
+                        () => {
+                            this.setHeroState('RUNNING_LEFT');
+                        }
+                    );
                 }
             } else {
                 this.runTimer = 0;
@@ -267,14 +285,19 @@ class Hero extends GameObjects.Sprite {
             }
         }
 
-        const isRunning = ['RUNNING_RIGHT', 'RUNNING_LEFT'].includes(this.heroState);
-        if (isRunning) {
-            if (isRightDown) {
-                this.setHeroState('RUNNING_RIGHT');
-            } else if (isLeftDown) {
-                this.setHeroState('RUNNING_LEFT');
-            }
-        }
+        const isRunning = [
+            'RUNNING_RIGHT',
+            'RUNNING_LEFT',
+            'RUNNING_RIGHT_START',
+            'RUNNING_LEFT_START',
+        ].includes(this.heroState);
+        // if (isRunning) {
+        //     if (isRightDown) {
+        //         this.setHeroState('RUNNING_RIGHT');
+        //     } else if (isLeftDown) {
+        //         this.setHeroState('RUNNING_LEFT');
+        //     }
+        // }
 
         // Handle hero walking
         if (!isJumping && !isRunning) {
@@ -344,6 +367,12 @@ class Hero extends GameObjects.Sprite {
         }
 
         // Handle running movement
+        if (heroState === 'RUNNING_RIGHT_START') {
+            this.body.setAccelerationX(acceleration);
+        } else if (heroState === 'RUNNING_LEFT_START') {
+            this.body.setAccelerationX(-acceleration);
+        }
+
         if (heroState === 'RUNNING_RIGHT') {
             this.body.setAccelerationX(acceleration);
         } else if (heroState === 'RUNNING_LEFT') {
@@ -399,6 +428,16 @@ class Hero extends GameObjects.Sprite {
         }
 
         // Handle running animation
+        if (heroState === 'RUNNING_RIGHT_START') {
+            this.setAnimation('start_run');
+            this.setFlipX(false);
+            this.body.setOffset(8, 4); // TODO
+        } else if (heroState === 'RUNNING_LEFT_START') {
+            this.setAnimation('start_run');
+            this.setFlipX(true);
+            this.body.setOffset(6, 4); // TODO
+        }
+
         if (heroState === 'RUNNING_RIGHT') {
             this.setAnimation('run');
             this.setFlipX(false);
