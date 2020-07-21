@@ -200,7 +200,8 @@ class Hero extends GameObjects.Sprite {
     }
 
     update(time, delta) {
-        console.log(this.heroState);
+        // console.log(this.heroState);
+        console.log(this.heroState, this.jumpTimer);
         // this.handleControls();
         this.handleHeroState();
         this.handleHeroMovement();
@@ -208,56 +209,66 @@ class Hero extends GameObjects.Sprite {
     }
 
     handleHeroState() {
-        const { heroState } = this;
         const heroOnGround = this.body.blocked.down || this.body.touching.down;
         const isRightDown = this.controlKeys.right.isDown || this.controlKeys.d.isDown;
         const isLeftDown = this.controlKeys.left.isDown || this.controlKeys.a.isDown;
         const isUpDown = this.controlKeys.up.isDown || this.controlKeys.w.isDown;
+        const isJumping = [
+            'JUMPING_START',
+            'BOOSTING_JUMP',
+            'JUMPING',
+            'JUMPING_START_RIGHT',
+            'BOOSTING_JUMP_RIGHT',
+            'JUMPING_RIGHT',
+            'JUMPING_START_LEFT',
+            'BOOSTING_JUMP_LEFT',
+            'JUMPING_LEFT',
+        ].includes(this.heroState);
 
         // Handle hero idle
-        if (heroOnGround && !isRightDown && !isLeftDown && !isUpDown) {
+        if (heroOnGround && !isRightDown && !isLeftDown) {
             if ([
                 'RUNNING_RIGHT',
                 'RUNNING_LEFT',
                 'WALKING_RIGHT',
                 'WALKING_LEFT',
                 'FALLING',
-            ].includes(heroState)) {
+            ].includes(this.heroState)) {
                 this.setHeroState('IDLE');
                 return;
             }
         }
 
         // Handle hero running
-        if (this.runTimer <= 0) {
-            const pressedRunRight = Input.Keyboard.JustUp(this.controlKeys.right);
-            const pressedRunLeft = Input.Keyboard.JustUp(this.controlKeys.left);
-            if (pressedRunRight || pressedRunLeft) {
-                this.pressedRunRight = pressedRunRight;
-                this.pressedRunLeft = pressedRunLeft;
-                this.runTimer = 1;
+        if (!isJumping) {
+            if (this.runTimer <= 0) {
+                const pressedRunRight = Input.Keyboard.JustUp(this.controlKeys.right);
+                const pressedRunLeft = Input.Keyboard.JustUp(this.controlKeys.left);
+                if (pressedRunRight || pressedRunLeft) {
+                    this.pressedRunRight = pressedRunRight;
+                    this.pressedRunLeft = pressedRunLeft;
+                    this.runTimer = 1;
+                }
+            } else if (this.runTimer <= 10) {
+                if (this.pressedRunRight && isRightDown) {
+                    this.setHeroState('RUNNING_RIGHT');
+                } else if (this.pressedRunLeft && isLeftDown) {
+                    this.setHeroState('RUNNING_LEFT');
+                }
+            } else {
+                this.runTimer = 0;
+                this.pressedRunRight = false;
+                this.pressedRunLeft = false;
             }
-        } else if (this.runTimer <= 10) {
-            if (this.pressedRunRight && isRightDown) {
-                this.setHeroState('RUNNING_RIGHT');
-                return; // TODO
-            } else if (this.pressedRunLeft && isLeftDown) {
-                this.setHeroState('RUNNING_LEFT');
-                return; // TODO
-            }
-        } else {
-            this.runTimer = 0;
-            this.pressedRunRight = false;
-            this.pressedRunLeft = false;
         }
 
         // Handle hero walking
-        if (isRightDown) {
-            this.setHeroState('WALKING_RIGHT');
-            return; // TODO
-        } else if (isLeftDown) {
-            this.setHeroState('WALKING_LEFT');
-            return; // TODO
+        if (!isJumping) {
+            if (isRightDown) {
+                this.setHeroState('WALKING_RIGHT');
+            } else if (isLeftDown) {
+                this.setHeroState('WALKING_LEFT');
+            }
         }
 
         // Handle hero jumping
@@ -267,7 +278,6 @@ class Hero extends GameObjects.Sprite {
         ) {
             this.jumpTimer = 1;
             this.setHeroState('JUMPING_START');
-            return; // TODO
         } else if (this.jumpTimer !== 0) {
             if (isUpDown) {
                 this.jumpTimer += 1;
@@ -275,71 +285,140 @@ class Hero extends GameObjects.Sprite {
                     // player has been holding jump for over 100 milliseconds, it's time to stop the hero
                     this.jumpTimer = 0;
                     this.setHeroState('JUMPING');
-                    return; // TODO
                 } else if (this.jumpTimer > 7) {
                     this.setHeroState('BOOSTING_JUMP');
-                    return; // TODO
                 }
             } else {
                 this.jumpTimer = 0;
                 this.setHeroState('JUMPING');
-                return; // TODO
+            }
+        }
+
+        if (['JUMPING_START', 'BOOSTING_JUMP', 'JUMPING'].includes(this.heroState)) {
+            if (isRightDown) {
+                this.setHeroState(`${this.heroState}_RIGHT`);
+            } else if (isLeftDown) {
+                this.setHeroState(`${this.heroState}_LEFT`);
             }
         }
 
         // Handle hero falling
         if (this.body.velocity.y > 0) {
             this.setHeroState('FALLING');
-            return; // TODO
         }
 
         // handle hero attacking
         if (heroOnGround && Input.Keyboard.JustDown(this.controlKeys.space)) {
             this.setHeroState('ATTACKING_START');
-            return; // TODO
         }
     }
 
     handleHeroMovement() {
         const { heroState } = this;
         const acceleration = this.getHeroAcceleration();
+        const heroOnGround = this.body.blocked.down || this.body.touching.down;
+
+        if (heroOnGround) {
+            this.body.setVelocityY(0);
+        }
 
         // Handle walking movement
-        if (heroState === 'RUNNING_RIGHT') {
+        if (heroState === 'WALKING_RIGHT') {
             this.body.setAccelerationX(acceleration);
-            this.setFlipX(false);
-            this.body.setOffset(8, 4); // TODO
-        } else if (heroState === 'RUNNING_LEFT') {
+        } else if (heroState === 'WALKING_LEFT') {
             this.body.setAccelerationX(-acceleration);
-            this.setFlipX(true);
-            this.body.setOffset(6, 4); // TODO
         }
 
         // Handle running movement
-        if (heroState === 'WALKING_RIGHT') {
+        if (heroState === 'RUNNING_RIGHT') {
             this.body.setAccelerationX(acceleration);
-            this.setFlipX(false);
-            this.body.setOffset(8, 4); // TODO
-        } else if (heroState === 'WALKING_LEFT') {
+        } else if (heroState === 'RUNNING_LEFT') {
             this.body.setAccelerationX(-acceleration);
-            this.setFlipX(true);
-            this.body.setOffset(6, 4); // TODO
         }
 
         // Handle jumping movement
-        if (['JUMPING_START', 'BOOSTING_JUMP'].includes(heroState)) {
+        if ([
+            'JUMPING_START',
+            'BOOSTING_JUMP',
+            'JUMPING_START_RIGHT',
+            'BOOSTING_JUMP_RIGHT',
+            'JUMPING_START_LEFT',
+            'BOOSTING_JUMP_LEFT',
+        ].includes(heroState)) {
             this.body.setVelocityY(-200);
+        }
+
+        if ([
+            'JUMPING_RIGHT',
+            'JUMPING_START_RIGHT',
+            'BOOSTING_JUMP_RIGHT',
+        ].includes(heroState)) {
+            this.body.setAccelerationX(acceleration);
+        }
+
+        if ([
+            'JUMPING_LEFT',
+            'JUMPING_START_LEFT',
+            'BOOSTING_JUMP_LEFT',
+        ].includes(heroState)) {
+            this.body.setAccelerationX(-acceleration);
         }
 
         // Handle idle movement
         if (heroState === 'IDLE') {
             this.body.setAccelerationX(0);
-            this.body.setVelocityY(0);
         }
     }
 
     handleHeroAnimation() {
-        // TODO
+        const { heroState } = this;
+
+        // Handle walking animation
+        if (heroState === 'WALKING_RIGHT') {
+            this.setAnimation('walk');
+            this.setFlipX(false);
+            this.body.setOffset(8, 4); // TODO
+        } else if (heroState === 'WALKING_LEFT') {
+            this.setAnimation('walk');
+            this.setFlipX(true);
+            this.body.setOffset(6, 4); // TODO
+        }
+
+        // Handle running animation
+        if (heroState === 'RUNNING_RIGHT') {
+            this.setAnimation('run');
+            this.setFlipX(false);
+            this.body.setOffset(8, 4); // TODO
+        } else if (heroState === 'RUNNING_LEFT') {
+            this.setAnimation('run');
+            this.setFlipX(true);
+            this.body.setOffset(6, 4); // TODO
+        }
+
+        // Handle jumping animation
+        if ([
+            'JUMPING_START',
+            'BOOSTING_JUMP',
+            'JUMPING',
+            'JUMPING_START_RIGHT',
+            'BOOSTING_JUMP_RIGHT',
+            'JUMPING_RIGHT',
+            'JUMPING_START_LEFT',
+            'BOOSTING_JUMP_LEFT',
+            'JUMPING_LEFT',
+        ].includes(heroState)) {
+            this.setAnimation('jump');
+        }
+
+        // Handle falling animation
+        if (heroState === 'FALLING') {
+            this.setFrame('player_jump_05');
+        }
+
+        // Handle idle animation
+        if (heroState === 'IDLE') {
+            this.setAnimation('idle');
+        }
     }
 
     getHeroAcceleration() {
