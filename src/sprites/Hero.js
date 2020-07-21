@@ -14,7 +14,17 @@ class Hero extends GameObjects.Sprite {
         super(scene, x, y, asset, frame);
         this.setDepth(500);
         this.setOrigin(0, 1);
+
+        // Properties
         this.enablePhysics = enablePhysics;
+        this.attackDuration = 300;
+        this.jumpTimer = 0;
+        this.runTimer = 0;
+        this.stopRunTimer = 0;
+        this.isAttacking = false;
+        this.isRunning = false;
+        this.pressedRunRight = false;
+        this.pressedRunLeft = false;
 
         if (addToScene) {
             scene.add.existing(this);
@@ -37,7 +47,6 @@ class Hero extends GameObjects.Sprite {
         // (f * d) / (4 * d) = 4000 / (4 * d)
         // f * d = 4 * 1000
         // f = (4 * 1000) / d
-        this.attackDuration = 300;
         this.createAnimations();
         this.setAnimation('idle');
 
@@ -51,8 +60,6 @@ class Hero extends GameObjects.Sprite {
             d: D,
             space: SPACE,
         });
-        this.jumptimer = 0;
-        this.isAttacking = false;
     }
 
     createAnimations = () => {
@@ -188,6 +195,10 @@ class Hero extends GameObjects.Sprite {
     };
 
     update(time, delta) {
+        this.handleControls(time, delta);
+    }
+
+    handleControls(time, delta) {
         if (!this.enablePhysics) {
             return;
         }
@@ -196,6 +207,32 @@ class Hero extends GameObjects.Sprite {
             // consumes any attack button to ignore it
             Input.Keyboard.JustDown(this.controlKeys.space);
             return;
+        }
+
+        if (this.runTimer > 0) {
+            this.runTimer += 1;
+        }
+
+        if (this.runTimer <= 0) {
+            const pressedRunRight = Input.Keyboard.JustUp(this.controlKeys.right);
+            const pressedRunLeft = Input.Keyboard.JustUp(this.controlKeys.left);
+            if (pressedRunRight || pressedRunLeft) {
+                this.pressedRunRight = pressedRunRight;
+                this.pressedRunLeft = pressedRunLeft;
+                this.runTimer = 1;
+            }
+        } else if (this.runTimer <= 10) {
+            if (this.pressedRunRight && this.controlKeys.right.isDown) {
+                this.setAnimation('run');
+                this.isRunning = true;
+            } else if (this.pressedRunLeft && this.controlKeys.left.isDown) {
+                this.setAnimation('run');
+                this.isRunning = true;
+            }
+        } else {
+            this.runTimer = 0;
+            this.pressedRunRight = false;
+            this.pressedRunLeft = false;
         }
 
         const onGround = this.body.blocked.down || this.body.touching.down;
@@ -216,6 +253,21 @@ class Hero extends GameObjects.Sprite {
             this.body.setAccelerationX(0);
         }
 
+        if (this.isRunning) {
+            if (
+                !(this.controlKeys.right.isDown)
+                && !(this.controlKeys.left.isDown)
+            ) {
+                this.stopRunTimer += 1;
+                if (this.stopRunTimer > 6) {
+                    this.isRunning = false;
+                    this.stopRunTimer = 0;
+                }
+            }
+
+            return;
+        }
+
         // Only allow the player to jump if they are on the ground
         let willJump = false;
         if (
@@ -225,29 +277,29 @@ class Hero extends GameObjects.Sprite {
             && onGround
         ) {
             // player is on the ground, so he is allowed to start a jump
-            this.jumptimer = 1;
+            this.jumpTimer = 1;
             this.body.setVelocityY(-200);
             this.setAnimation('jump');
             this.body.setOffset(8, 2);
             willJump = true;
         } else if (
-            this.jumptimer !== 0
+            this.jumpTimer !== 0
             && (
                 this.controlKeys.up.isDown
                 || this.controlKeys.w.isDown
             )) {
             // player is no longer on the ground, but is still holding the jump key
-            this.jumptimer += 1;
-            if (this.jumptimer > 8) {
+            this.jumpTimer += 1;
+            if (this.jumpTimer > 8) {
                 // player has been holding jump for over 100 millliseconds, it's time to stop him
-                this.jumptimer = 0;
-            } else if (this.jumptimer > 7) {
+                this.jumpTimer = 0;
+            } else if (this.jumpTimer > 7) {
                 // player is allowed to jump higher, not yet 600 milliseconds of jumping
                 this.body.setVelocityY(-200);
             }
-        } else if (this.jumptimer !== 0) {
-            // reset this.jumptimer since the player is no longer holding the jump key
-            this.jumptimer = 0;
+        } else if (this.jumpTimer !== 0) {
+            // reset this.jumpTimer since the player is no longer holding the jump key
+            this.jumpTimer = 0;
         }
 
         // Update the animation/texture based on the state of the player
