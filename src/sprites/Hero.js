@@ -25,6 +25,7 @@ class Hero extends GameObjects.Sprite {
         this.isRunning = false;
         this.pressedRunRight = false;
         this.pressedRunLeft = false;
+        this.heroState = 'IDLE';
 
         if (addToScene) {
             scene.add.existing(this);
@@ -194,11 +195,159 @@ class Hero extends GameObjects.Sprite {
         this.anims.play(animationKey, ignoreIfPlaying);
     };
 
-    update(time, delta) {
-        this.handleControls(time, delta);
+    setHeroState(heroState) {
+        this.heroState = heroState;
     }
 
-    handleControls(time, delta) {
+    update(time, delta) {
+        console.log(this.heroState);
+        // this.handleControls();
+        this.handleHeroState();
+        this.handleHeroMovement();
+        this.handleHeroAnimation();
+    }
+
+    handleHeroState() {
+        const { heroState } = this;
+        const heroOnGround = this.body.blocked.down || this.body.touching.down;
+        const isRightDown = this.controlKeys.right.isDown || this.controlKeys.d.isDown;
+        const isLeftDown = this.controlKeys.left.isDown || this.controlKeys.a.isDown;
+        const isUpDown = this.controlKeys.up.isDown || this.controlKeys.w.isDown;
+
+        // Handle hero idle
+        if (heroOnGround && !isRightDown && !isLeftDown && !isUpDown) {
+            if ([
+                'RUNNING_RIGHT',
+                'RUNNING_LEFT',
+                'WALKING_RIGHT',
+                'WALKING_LEFT',
+                'FALLING',
+            ].includes(heroState)) {
+                this.setHeroState('IDLE');
+                return;
+            }
+        }
+
+        // Handle hero running
+        if (this.runTimer <= 0) {
+            const pressedRunRight = Input.Keyboard.JustUp(this.controlKeys.right);
+            const pressedRunLeft = Input.Keyboard.JustUp(this.controlKeys.left);
+            if (pressedRunRight || pressedRunLeft) {
+                this.pressedRunRight = pressedRunRight;
+                this.pressedRunLeft = pressedRunLeft;
+                this.runTimer = 1;
+            }
+        } else if (this.runTimer <= 10) {
+            if (this.pressedRunRight && isRightDown) {
+                this.setHeroState('RUNNING_RIGHT');
+                return; // TODO
+            } else if (this.pressedRunLeft && isLeftDown) {
+                this.setHeroState('RUNNING_LEFT');
+                return; // TODO
+            }
+        } else {
+            this.runTimer = 0;
+            this.pressedRunRight = false;
+            this.pressedRunLeft = false;
+        }
+
+        // Handle hero walking
+        if (isRightDown) {
+            this.setHeroState('WALKING_RIGHT');
+            return; // TODO
+        } else if (isLeftDown) {
+            this.setHeroState('WALKING_LEFT');
+            return; // TODO
+        }
+
+        // Handle hero jumping
+        if (
+            heroOnGround
+            && (Input.Keyboard.JustDown(this.controlKeys.up) || Input.Keyboard.JustDown(this.controlKeys.w))
+        ) {
+            this.jumpTimer = 1;
+            this.setHeroState('JUMPING_START');
+            return; // TODO
+        } else if (this.jumpTimer !== 0) {
+            if (isUpDown) {
+                this.jumpTimer += 1;
+                if (this.jumpTimer > 8) {
+                    // player has been holding jump for over 100 milliseconds, it's time to stop the hero
+                    this.jumpTimer = 0;
+                    this.setHeroState('JUMPING');
+                    return; // TODO
+                } else if (this.jumpTimer > 7) {
+                    this.setHeroState('BOOSTING_JUMP');
+                    return; // TODO
+                }
+            } else {
+                this.jumpTimer = 0;
+                this.setHeroState('JUMPING');
+                return; // TODO
+            }
+        }
+
+        // Handle hero falling
+        if (this.body.velocity.y > 0) {
+            this.setHeroState('FALLING');
+            return; // TODO
+        }
+
+        // handle hero attacking
+        if (heroOnGround && Input.Keyboard.JustDown(this.controlKeys.space)) {
+            this.setHeroState('ATTACKING_START');
+            return; // TODO
+        }
+    }
+
+    handleHeroMovement() {
+        const { heroState } = this;
+        const acceleration = this.getHeroAcceleration();
+
+        // Handle walking movement
+        if (heroState === 'RUNNING_RIGHT') {
+            this.body.setAccelerationX(acceleration);
+            this.setFlipX(false);
+            this.body.setOffset(8, 4); // TODO
+        } else if (heroState === 'RUNNING_LEFT') {
+            this.body.setAccelerationX(-acceleration);
+            this.setFlipX(true);
+            this.body.setOffset(6, 4); // TODO
+        }
+
+        // Handle running movement
+        if (heroState === 'WALKING_RIGHT') {
+            this.body.setAccelerationX(acceleration);
+            this.setFlipX(false);
+            this.body.setOffset(8, 4); // TODO
+        } else if (heroState === 'WALKING_LEFT') {
+            this.body.setAccelerationX(-acceleration);
+            this.setFlipX(true);
+            this.body.setOffset(6, 4); // TODO
+        }
+
+        // Handle jumping movement
+        if (['JUMPING_START', 'BOOSTING_JUMP'].includes(heroState)) {
+            this.body.setVelocityY(-200);
+        }
+
+        // Handle idle movement
+        if (heroState === 'IDLE') {
+            this.body.setAccelerationX(0);
+            this.body.setVelocityY(0);
+        }
+    }
+
+    handleHeroAnimation() {
+        // TODO
+    }
+
+    getHeroAcceleration() {
+        const onGround = this.body.blocked.down || this.body.touching.down;
+        return onGround ? 600 : 200;
+    }
+
+    handleControls() {
         if (!this.enablePhysics) {
             return;
         }
