@@ -504,6 +504,51 @@ class Hero extends GameObjects.Sprite {
         return this.body.blocked.down || this.body.touching.down;
     }
 
+    // TODO todas essas aqui
+    isHeroRunning_new() {
+        // Is hero running? Doesn't the other states
+        return this.isHeroRunningLeft()
+            || this.isHeroRunningRight();
+    }
+
+    isHeroRunningRight() {
+        return this.isHeroRunningRightWhileJumping()
+            || this.isHeroWalkingRightWhileJumping();
+    }
+
+    isHeroRunningRightWhileJumping() {
+        return [
+            RUN_JUMPING_RIGHT,
+            RUN_BOOSTING_JUMP_RIGHT,
+            RUN_JUMPING_START_RIGHT,
+        ].includes(this.heroState);
+    }
+
+    isHeroWalkingRightWhileJumping() {
+        return [
+            // TODO
+        ].includes(this.heroState);
+    }
+
+    isHeroRunningLeft() {
+        return this.isHeroRunningLeftWhileJumping()
+            || this.isHeroWalkingLeftWhileJumping();
+    }
+
+    isHeroRunningLeftWhileJumping() {
+        return [
+            RUN_JUMPING_LEFT,
+            RUN_BOOSTING_JUMP_LEFT,
+            RUN_JUMPING_START_LEFT,
+        ].includes(this.heroState);
+    }
+
+    isHeroWalkingLeftWhileJumping() {
+        return [
+            // TODO
+        ].includes(this.heroState);
+    }
+
     isHeroRunning() {
         return [
             RUNNING_RIGHT,
