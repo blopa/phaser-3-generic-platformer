@@ -36,6 +36,9 @@ const RUN_JUMPING_START_LEFT = 'RUN_JUMPING_START_LEFT';
 const FALLING = 'FALLING';
 const FALLING_RIGHT = 'FALLING_RIGHT';
 const FALLING_LEFT = 'FALLING_LEFT';
+const RUN_FALLING = 'RUN_FALLING';
+const RUN_FALLING_RIGHT = 'RUN_FALLING_RIGHT';
+const RUN_FALLING_LEFT = 'RUN_FALLING_LEFT';
 
 // Attacking
 const ATTACKING_START = 'ATTACKING_START';
@@ -482,20 +485,37 @@ class Hero extends GameObjects.Sprite {
         // Handle hero jumping
         if (heroOnGround && (this.isUpJustDown() || this.isAButtonJustDown())) {
             this.jumpTimer = 1;
-            this.setHeroState(JUMPING_START);
+            let newHeroState = JUMPING_START;
+            if (this.isHeroRunning()) {
+                newHeroState = RUN_JUMPING_START;
+            }
+            this.setHeroState(newHeroState);
         } else if (this.jumpTimer !== 0) {
             if (isUpDown || isAButtonDown) {
                 this.jumpTimer += 1;
                 if (this.jumpTimer > 8) {
-                    // player has been holding jump for over 100 milliseconds, it's time to stop the hero
+                    // player has been holding jump for over 100 milliseconds
+                    // it's time to stop the hero
                     this.jumpTimer = 0;
-                    this.setHeroState(JUMPING);
+                    let newHeroState = JUMPING;
+                    if (this.isHeroRunning()) {
+                        newHeroState = RUN_JUMPING;
+                    }
+                    this.setHeroState(newHeroState);
                 } else if (this.jumpTimer > 7) {
-                    this.setHeroState(BOOSTING_JUMP);
+                    let newHeroState = BOOSTING_JUMP;
+                    if (this.isHeroRunning()) {
+                        newHeroState = RUN_BOOSTING_JUMP;
+                    }
+                    this.setHeroState(newHeroState);
                 }
             } else {
                 this.jumpTimer = 0;
-                this.setHeroState(JUMPING);
+                let newHeroState = JUMPING;
+                if (this.isHeroRunning()) {
+                    newHeroState = RUN_JUMPING;
+                }
+                this.setHeroState(newHeroState);
             }
         }
 
@@ -504,29 +524,35 @@ class Hero extends GameObjects.Sprite {
             if (isRightDown) {
                 // JUMPING_START_RIGHT, BOOSTING_JUMP_RIGHT, JUMPING_RIGHT
                 let newHeroState = this.heroState;
+                const runningPrefix = this.isHeroRunning() ? 'RUN_' : '';
                 if ([JUMPING_START, BOOSTING_JUMP, JUMPING].includes(this.heroState)) {
-                    newHeroState = `${this.heroState}_RIGHT`;
+                    newHeroState = `${runningPrefix}${this.heroState}_RIGHT`;
                 } else if ([JUMPING_START_LEFT, BOOSTING_JUMP_LEFT, JUMPING_LEFT].includes(this.heroState)) {
                     const parts = this.heroState.split('_LEFT');
-                    newHeroState = `${parts[0]}_RIGHT`;
+                    newHeroState = `${runningPrefix}${parts[0]}_RIGHT`;
                 }
                 this.setHeroState(newHeroState);
             } else if (isLeftDown) {
                 // JUMPING_START_LEFT, BOOSTING_JUMP_LEFT, JUMPING_LEFT
                 let newHeroState = this.heroState;
+                const runningPrefix = this.isHeroRunning() ? 'RUN_' : '';
                 if ([JUMPING_START, BOOSTING_JUMP, JUMPING].includes(this.heroState)) {
-                    newHeroState = `${this.heroState}_LEFT`;
+                    newHeroState = `${runningPrefix}${this.heroState}_LEFT`;
                 } else if ([JUMPING_START_RIGHT, BOOSTING_JUMP_RIGHT, JUMPING_RIGHT].includes(this.heroState)) {
                     const parts = this.heroState.split('_RIGHT');
-                    newHeroState = `${parts[0]}_LEFT`;
+                    newHeroState = `${runningPrefix}${parts[0]}_LEFT`;
                 }
                 this.setHeroState(newHeroState);
             }
         }
 
         // Handle hero falling
-        if (this.body.velocity.y > 0) {
-            this.setHeroState(FALLING);
+        if (!this.isHeroFalling() && this.body.velocity.y > 0) {
+            if (this.isHeroRunning()) {
+                this.setHeroState(RUN_FALLING);
+            } else {
+                this.setHeroState(FALLING);
+            }
         }
 
         // Check if it is falling in a certain direction
@@ -534,19 +560,21 @@ class Hero extends GameObjects.Sprite {
             if (isRightDown) {
                 // FALLING, FALLING_RIGHT
                 let newHeroState = this.heroState;
-                if (this.heroState === FALLING) {
-                    newHeroState = `${this.heroState}_RIGHT`;
-                } else if (this.heroState === FALLING_LEFT) {
+                if ([FALLING, FALLING_LEFT].includes(this.heroState)) {
                     newHeroState = FALLING_RIGHT;
+                    if (this.isHeroRunning()) {
+                        newHeroState = RUN_FALLING_RIGHT;
+                    }
                 }
                 this.setHeroState(newHeroState);
             } else if (isLeftDown) {
                 // FALLING, FALLING_LEFT
                 let newHeroState = this.heroState;
-                if (this.heroState === FALLING) {
-                    newHeroState = `${this.heroState}_LEFT`;
-                } else if (this.heroState === FALLING_RIGHT) {
+                if ([FALLING, FALLING_RIGHT].includes(this.heroState)) {
                     newHeroState = FALLING_LEFT;
+                    if (this.isHeroRunning()) {
+                        newHeroState = RUN_FALLING_LEFT;
+                    }
                 }
                 this.setHeroState(newHeroState);
             }
