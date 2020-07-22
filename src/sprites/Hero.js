@@ -2,6 +2,25 @@
 import { GameObjects, Input } from 'phaser';
 import { isset } from '../utils/utils';
 
+const RUNNING_RIGHT = 'RUNNING_RIGHT';
+const RUNNING_LEFT = 'RUNNING_LEFT';
+const RUNNING_RIGHT_START = 'RUNNING_RIGHT_START';
+const RUNNING_LEFT_START = 'RUNNING_LEFT_START';
+const WALKING_RIGHT = 'WALKING_RIGHT';
+const WALKING_LEFT = 'WALKING_LEFT';
+const JUMPING_START = 'JUMPING_START';
+const JUMPING = 'JUMPING';
+const BOOSTING_JUMP = 'BOOSTING_JUMP';
+const FALLING = 'FALLING';
+const ATTACKING_START = 'ATTACKING_START';
+const JUMPING_START_RIGHT = 'JUMPING_START_RIGHT';
+const BOOSTING_JUMP_RIGHT = 'BOOSTING_JUMP_RIGHT';
+const JUMPING_START_LEFT = 'JUMPING_START_LEFT';
+const BOOSTING_JUMP_LEFT = 'BOOSTING_JUMP_LEFT';
+const JUMPING_RIGHT = 'JUMPING_RIGHT';
+const JUMPING_LEFT = 'JUMPING_LEFT';
+const IDLE = 'IDLE';
+
 class Hero extends GameObjects.Sprite {
     constructor({
         scene,
@@ -22,12 +41,9 @@ class Hero extends GameObjects.Sprite {
         this.startRunDuration = 350;
         this.jumpTimer = 0;
         this.runTimer = 0;
-        this.stopRunTimer = 0;
-        this.isAttacking = false;
-        this.isRunning = false;
         this.pressedRunRight = false;
         this.pressedRunLeft = false;
-        this.heroState = 'IDLE';
+        this.heroState = IDLE;
 
         if (addToScene) {
             scene.add.existing(this);
@@ -51,15 +67,44 @@ class Hero extends GameObjects.Sprite {
             this.debugText.setFontSize(12);
         }
 
-        const { LEFT, RIGHT, UP, W, A, D, SPACE } = Input.Keyboard.KeyCodes;
+        const {
+            LEFT: left,
+            RIGHT: right,
+            UP: up,
+            W: w,
+            A: a,
+            D: d,
+            SPACE: space,
+            F: f,
+            SHIFT: shift,
+            ENTER: enter,
+        } = Input.Keyboard.KeyCodes;
+        const {
+            left: gamepadLeft,
+            right: gamepadRight,
+            up: gamepadUp,
+            down: gamepadDown,
+            A: gamepadA,
+            B: gamepadB,
+        } = Input.Gamepad.Gamepad;
+
         this.controlKeys = scene.input.keyboard.addKeys({
-            left: LEFT,
-            right: RIGHT,
-            up: UP,
-            w: W,
-            a: A,
-            d: D,
-            space: SPACE,
+            left,
+            right,
+            up,
+            w,
+            a,
+            d,
+            space,
+            f,
+            shift,
+            enter,
+            gamepadLeft,
+            gamepadRight,
+            gamepadUp,
+            gamepadDown,
+            gamepadA,
+            gamepadB,
         });
     }
 
@@ -202,48 +247,135 @@ class Hero extends GameObjects.Sprite {
         this.heroState = heroState;
     }
 
+    isRightDown() {
+        return this.controlKeys.right.isDown
+            || this.controlKeys.d.isDown
+            || this.controlKeys.gamepadRight.isDown;
+    }
+
+    isLeftDown() {
+        return this.controlKeys.left.isDown
+            || this.controlKeys.a.isDown
+            || this.controlKeys.gamepadLeft.isDown;
+    }
+
+    isUpDown() {
+        return this.controlKeys.up.isDown
+            || this.controlKeys.w.isDown
+            || this.controlKeys.gamepadUp.isDown;
+    }
+
+    isDownDown() {
+        return this.controlKeys.down.isDown
+            || this.controlKeys.s.isDown
+            || this.controlKeys.gamepadDown.isDown;
+    }
+
+    isAButtonDown() {
+        return this.controlKeys.space.isDown
+            || this.controlKeys.gamepadA.isDown;
+    }
+
+    isBButtonDown() {
+        return this.controlKeys.f.isDown
+            || this.controlKeys.enter.isDown
+            || this.controlKeys.gamepadB.isDown;
+    }
+
+    isRightJustDown() {
+        return Input.Keyboard.JustDown(this.controlKeys.right)
+            || Input.Keyboard.JustDown(this.controlKeys.d)
+            || Input.Keyboard.JustDown(this.controlKeys.gamepadRight);
+    }
+
+    isLeftJustDown() {
+        return Input.Keyboard.JustDown(this.controlKeys.left)
+            || Input.Keyboard.JustDown(this.controlKeys.a)
+            || Input.Keyboard.JustDown(this.controlKeys.gamepadLeft);
+    }
+
+    isUpJustDown() {
+        return Input.Keyboard.JustDown(this.controlKeys.up)
+            || Input.Keyboard.JustDown(this.controlKeys.w)
+            || Input.Keyboard.JustDown(this.controlKeys.gamepadUp);
+    }
+
+    isAButtonJustDown() {
+        return Input.Keyboard.JustDown(this.controlKeys.space)
+            || Input.Keyboard.JustDown(this.controlKeys.gamepadA);
+    }
+
+    isBButtonJustDown() {
+        return Input.Keyboard.JustDown(this.controlKeys.f)
+            || Input.Keyboard.JustDown(this.controlKeys.enter)
+            || Input.Keyboard.JustDown(this.controlKeys.gamepadB);
+    }
+
+    getHeroAcceleration() {
+        const onGround = this.body.blocked.down || this.body.touching.down;
+        return onGround ? 600 : 200;
+    }
+
+    isHeroJumping() {
+        return [
+            JUMPING_START,
+            BOOSTING_JUMP,
+            JUMPING,
+            JUMPING_START_RIGHT,
+            BOOSTING_JUMP_RIGHT,
+            JUMPING_RIGHT,
+            JUMPING_START_LEFT,
+            BOOSTING_JUMP_LEFT,
+            JUMPING_LEFT,
+        ].includes(this.heroState);
+    }
+
+    isHeroOnGround() {
+        return this.body.blocked.down || this.body.touching.down;
+    }
+
+    isHeroRunning() {
+        return [
+            RUNNING_RIGHT,
+            RUNNING_LEFT,
+            RUNNING_RIGHT_START,
+            RUNNING_LEFT_START,
+        ].includes(this.heroState);
+    }
+
     update(time, delta) {
-        this.debugText.setX(this.x);
-        this.debugText.setY(this.y - 50);
-        // console.log(this.heroState);
-        // console.log(this.runTimer);
-        // this.handleControls();
+        if (IS_DEV) {
+            this.debugText.setX(this.x);
+            this.debugText.setY(this.y - 50);
+        }
+
         this.handleHeroState();
         this.handleHeroMovement();
         this.handleHeroAnimation();
     }
 
     handleHeroState() {
-        const heroOnGround = this.body.blocked.down || this.body.touching.down;
-        const isRightDown = this.controlKeys.right.isDown || this.controlKeys.d.isDown;
-        const isLeftDown = this.controlKeys.left.isDown || this.controlKeys.a.isDown;
-        const isUpDown = this.controlKeys.up.isDown || this.controlKeys.w.isDown;
-        const pressedRight = Input.Keyboard.JustDown(this.controlKeys.right);
-        const pressedLeft = Input.Keyboard.JustDown(this.controlKeys.left);
-        const isJumping = [
-            'JUMPING_START',
-            'BOOSTING_JUMP',
-            'JUMPING',
-            'JUMPING_START_RIGHT',
-            'BOOSTING_JUMP_RIGHT',
-            'JUMPING_RIGHT',
-            'JUMPING_START_LEFT',
-            'BOOSTING_JUMP_LEFT',
-            'JUMPING_LEFT',
-        ].includes(this.heroState);
+        const heroOnGround = this.isHeroOnGround();
+        const isRightDown = this.isRightDown();
+        const isLeftDown = this.isLeftDown();
+        const isUpDown = this.isUpDown();
+        const isAButtonDown = this.isAButtonDown();
+        const pressedRight = this.isRightJustDown();
+        const pressedLeft = this.isLeftJustDown();
+        const isJumping = this.isHeroJumping();
 
         // Handle hero idle
         if (heroOnGround && !isRightDown && !isLeftDown) {
             if ([
-                'RUNNING_RIGHT_START',
-                'RUNNING_LEFT_START',
-                'RUNNING_RIGHT',
-                'RUNNING_LEFT',
-                'WALKING_RIGHT',
-                'WALKING_LEFT',
-                'FALLING',
+                RUNNING_RIGHT_START,
+                RUNNING_LEFT_START,
+                RUNNING_RIGHT,
+                RUNNING_LEFT,
+                WALKING_RIGHT,
+                WALKING_LEFT,
+                FALLING,
             ].includes(this.heroState)) {
-                this.setHeroState('IDLE');
+                this.setHeroState(IDLE);
                 return;
             }
         }
@@ -258,19 +390,19 @@ class Hero extends GameObjects.Sprite {
                 }
             } else if (this.runTimer <= 10) {
                 if (this.pressedRunRight && isRightDown && pressedRight) {
-                    this.setHeroState('RUNNING_RIGHT_START');
+                    this.setHeroState(RUNNING_RIGHT_START);
                     this.scene.time.delayedCall(
                         this.startRunDuration,
                         () => {
-                            this.setHeroState('RUNNING_RIGHT');
+                            this.setHeroState(RUNNING_RIGHT);
                         }
                     );
                 } else if (this.pressedRunLeft && isLeftDown && pressedLeft) {
-                    this.setHeroState('RUNNING_LEFT_START');
+                    this.setHeroState(RUNNING_LEFT_START);
                     this.scene.time.delayedCall(
                         this.startRunDuration,
                         () => {
-                            this.setHeroState('RUNNING_LEFT');
+                            this.setHeroState(RUNNING_LEFT);
                         }
                     );
                 }
@@ -285,68 +417,56 @@ class Hero extends GameObjects.Sprite {
             }
         }
 
-        const isRunning = [
-            'RUNNING_RIGHT',
-            'RUNNING_LEFT',
-            'RUNNING_RIGHT_START',
-            'RUNNING_LEFT_START',
-        ].includes(this.heroState);
-        // if (isRunning) {
-        //     if (isRightDown) {
-        //         this.setHeroState('RUNNING_RIGHT');
-        //     } else if (isLeftDown) {
-        //         this.setHeroState('RUNNING_LEFT');
-        //     }
-        // }
+        const isRunning = this.isHeroRunning();
 
         // Handle hero walking
         if (!isJumping && !isRunning) {
             if (isRightDown) {
-                this.setHeroState('WALKING_RIGHT');
+                this.setHeroState(WALKING_RIGHT);
             } else if (isLeftDown) {
-                this.setHeroState('WALKING_LEFT');
+                this.setHeroState(WALKING_LEFT);
             }
         }
 
         // Handle hero jumping
-        if (
-            heroOnGround
-            && (Input.Keyboard.JustDown(this.controlKeys.up) || Input.Keyboard.JustDown(this.controlKeys.w))
-        ) {
+        if (heroOnGround && (this.isUpJustDown() || this.isAButtonJustDown())) {
             this.jumpTimer = 1;
-            this.setHeroState('JUMPING_START');
+            this.setHeroState(JUMPING_START);
         } else if (this.jumpTimer !== 0) {
-            if (isUpDown) {
+            if (isUpDown || isAButtonDown) {
                 this.jumpTimer += 1;
                 if (this.jumpTimer > 8) {
                     // player has been holding jump for over 100 milliseconds, it's time to stop the hero
                     this.jumpTimer = 0;
-                    this.setHeroState('JUMPING');
+                    this.setHeroState(JUMPING);
                 } else if (this.jumpTimer > 7) {
-                    this.setHeroState('BOOSTING_JUMP');
+                    this.setHeroState(BOOSTING_JUMP);
                 }
             } else {
                 this.jumpTimer = 0;
-                this.setHeroState('JUMPING');
+                this.setHeroState(JUMPING);
             }
         }
 
-        if (['JUMPING_START', 'BOOSTING_JUMP', 'JUMPING'].includes(this.heroState)) {
+        // Check if it is jumping in a certain direction
+        if ([JUMPING_START, BOOSTING_JUMP, JUMPING].includes(this.heroState)) {
             if (isRightDown) {
+                // JUMPING_START_RIGHT, BOOSTING_JUMP_RIGHT, JUMPING_RIGHT
                 this.setHeroState(`${this.heroState}_RIGHT`);
             } else if (isLeftDown) {
+                // JUMPING_START_LEFT, BOOSTING_JUMP_LEFT, JUMPING_LEFT
                 this.setHeroState(`${this.heroState}_LEFT`);
             }
         }
 
         // Handle hero falling
         if (this.body.velocity.y > 0) {
-            this.setHeroState('FALLING');
+            this.setHeroState(FALLING);
         }
 
         // handle hero attacking
-        if (heroOnGround && Input.Keyboard.JustDown(this.controlKeys.space)) {
-            this.setHeroState('ATTACKING_START');
+        if (heroOnGround && this.isBButtonJustDown()) {
+            this.setHeroState(ATTACKING_START);
         }
     }
 
@@ -360,55 +480,55 @@ class Hero extends GameObjects.Sprite {
         }
 
         // Handle walking movement
-        if (heroState === 'WALKING_RIGHT') {
+        if (heroState === WALKING_RIGHT) {
             this.body.setAccelerationX(acceleration);
-        } else if (heroState === 'WALKING_LEFT') {
+        } else if (heroState === WALKING_LEFT) {
             this.body.setAccelerationX(-acceleration);
         }
 
         // Handle running movement
-        if (heroState === 'RUNNING_RIGHT_START') {
+        if (heroState === RUNNING_RIGHT_START) {
             this.body.setAccelerationX(acceleration);
-        } else if (heroState === 'RUNNING_LEFT_START') {
+        } else if (heroState === RUNNING_LEFT_START) {
             this.body.setAccelerationX(-acceleration);
         }
 
-        if (heroState === 'RUNNING_RIGHT') {
+        if (heroState === RUNNING_RIGHT) {
             this.body.setAccelerationX(acceleration);
-        } else if (heroState === 'RUNNING_LEFT') {
+        } else if (heroState === RUNNING_LEFT) {
             this.body.setAccelerationX(-acceleration);
         }
 
         // Handle jumping movement
         if ([
-            'JUMPING_START',
-            'BOOSTING_JUMP',
-            'JUMPING_START_RIGHT',
-            'BOOSTING_JUMP_RIGHT',
-            'JUMPING_START_LEFT',
-            'BOOSTING_JUMP_LEFT',
+            JUMPING_START,
+            BOOSTING_JUMP,
+            JUMPING_START_RIGHT,
+            BOOSTING_JUMP_RIGHT,
+            JUMPING_START_LEFT,
+            BOOSTING_JUMP_LEFT,
         ].includes(heroState)) {
             this.body.setVelocityY(-200);
         }
 
         if ([
-            'JUMPING_RIGHT',
-            'JUMPING_START_RIGHT',
-            'BOOSTING_JUMP_RIGHT',
+            JUMPING_RIGHT,
+            JUMPING_START_RIGHT,
+            BOOSTING_JUMP_RIGHT,
         ].includes(heroState)) {
             this.body.setAccelerationX(acceleration);
         }
 
         if ([
-            'JUMPING_LEFT',
-            'JUMPING_START_LEFT',
-            'BOOSTING_JUMP_LEFT',
+            JUMPING_LEFT,
+            JUMPING_START_LEFT,
+            BOOSTING_JUMP_LEFT,
         ].includes(heroState)) {
             this.body.setAccelerationX(-acceleration);
         }
 
         // Handle idle movement
-        if (heroState === 'IDLE') {
+        if (heroState === IDLE) {
             this.body.setAccelerationX(0);
         }
     }
@@ -417,32 +537,32 @@ class Hero extends GameObjects.Sprite {
         const { heroState } = this;
 
         // Handle walking animation
-        if (heroState === 'WALKING_RIGHT') {
+        if (heroState === WALKING_RIGHT) {
             this.setAnimation('walk');
             this.setFlipX(false);
             this.body.setOffset(8, 4); // TODO
-        } else if (heroState === 'WALKING_LEFT') {
+        } else if (heroState === WALKING_LEFT) {
             this.setAnimation('walk');
             this.setFlipX(true);
             this.body.setOffset(6, 4); // TODO
         }
 
         // Handle running animation
-        if (heroState === 'RUNNING_RIGHT_START') {
+        if (heroState === RUNNING_RIGHT_START) {
             this.setAnimation('start_run');
             this.setFlipX(false);
             this.body.setOffset(8, 4); // TODO
-        } else if (heroState === 'RUNNING_LEFT_START') {
+        } else if (heroState === RUNNING_LEFT_START) {
             this.setAnimation('start_run');
             this.setFlipX(true);
             this.body.setOffset(6, 4); // TODO
         }
 
-        if (heroState === 'RUNNING_RIGHT') {
+        if (heroState === RUNNING_RIGHT) {
             this.setAnimation('run');
             this.setFlipX(false);
             this.body.setOffset(8, 4); // TODO
-        } else if (heroState === 'RUNNING_LEFT') {
+        } else if (heroState === RUNNING_LEFT) {
             this.setAnimation('run');
             this.setFlipX(true);
             this.body.setOffset(6, 4); // TODO
@@ -450,166 +570,27 @@ class Hero extends GameObjects.Sprite {
 
         // Handle jumping animation
         if ([
-            'JUMPING_START',
-            'BOOSTING_JUMP',
-            'JUMPING',
-            'JUMPING_START_RIGHT',
-            'BOOSTING_JUMP_RIGHT',
-            'JUMPING_RIGHT',
-            'JUMPING_START_LEFT',
-            'BOOSTING_JUMP_LEFT',
-            'JUMPING_LEFT',
+            JUMPING_START,
+            BOOSTING_JUMP,
+            JUMPING,
+            JUMPING_START_RIGHT,
+            BOOSTING_JUMP_RIGHT,
+            JUMPING_RIGHT,
+            JUMPING_START_LEFT,
+            BOOSTING_JUMP_LEFT,
+            JUMPING_LEFT,
         ].includes(heroState)) {
             this.setAnimation('jump');
         }
 
         // Handle falling animation
-        if (heroState === 'FALLING') {
+        if (heroState === FALLING) {
             this.setFrame('player_jump_05');
         }
 
         // Handle idle animation
-        if (heroState === 'IDLE') {
+        if (heroState === IDLE) {
             this.setAnimation('idle');
-        }
-    }
-
-    getHeroAcceleration() {
-        const onGround = this.body.blocked.down || this.body.touching.down;
-        return onGround ? 600 : 200;
-    }
-
-    handleControls() {
-        if (!this.enablePhysics) {
-            return;
-        }
-
-        if (this.isAttacking) {
-            // consumes any attack button to ignore it
-            Input.Keyboard.JustDown(this.controlKeys.space);
-            return;
-        }
-
-        if (this.runTimer > 0) {
-            this.runTimer += 1;
-        }
-
-        if (this.runTimer <= 0) {
-            const pressedRunRight = Input.Keyboard.JustUp(this.controlKeys.right);
-            const pressedRunLeft = Input.Keyboard.JustUp(this.controlKeys.left);
-            if (pressedRunRight || pressedRunLeft) {
-                this.pressedRunRight = pressedRunRight;
-                this.pressedRunLeft = pressedRunLeft;
-                this.runTimer = 1;
-            }
-        } else if (this.runTimer <= 10) {
-            if (this.pressedRunRight && this.controlKeys.right.isDown) {
-                this.setAnimation('run');
-                this.isRunning = true;
-            } else if (this.pressedRunLeft && this.controlKeys.left.isDown) {
-                this.setAnimation('run');
-                this.isRunning = true;
-            }
-        } else {
-            this.runTimer = 0;
-            this.pressedRunRight = false;
-            this.pressedRunLeft = false;
-        }
-
-        const onGround = this.body.blocked.down || this.body.touching.down;
-        const acceleration = onGround ? 600 : 200;
-
-        // Apply horizontal acceleration when left/a or right/d are applied
-        if (this.controlKeys.left.isDown || this.controlKeys.a.isDown) {
-            this.body.setAccelerationX(-acceleration);
-            // No need to have a separate set of graphics for running to the left & to the right. Instead
-            // we can just mirror the this.body.
-            this.setFlipX(true);
-            this.body.setOffset(6, 4);
-        } else if (this.controlKeys.right.isDown || this.controlKeys.d.isDown) {
-            this.body.setAccelerationX(acceleration);
-            this.setFlipX(false);
-            this.body.setOffset(8, 4);
-        } else {
-            this.body.setAccelerationX(0);
-        }
-
-        if (this.isRunning) {
-            if (
-                !(this.controlKeys.right.isDown)
-                && !(this.controlKeys.left.isDown)
-            ) {
-                this.stopRunTimer += 1;
-                if (this.stopRunTimer > 6) {
-                    this.isRunning = false;
-                    this.stopRunTimer = 0;
-                }
-            }
-
-            return;
-        }
-
-        // Only allow the player to jump if they are on the ground
-        let willJump = false;
-        if (
-            // The order here matter because we check if the button was pressed, and that consumes the button
-            // this will avoid jumping right after hitting the ground
-            (Input.Keyboard.JustDown(this.controlKeys.up) || Input.Keyboard.JustDown(this.controlKeys.w))
-            && onGround
-        ) {
-            // player is on the ground, so he is allowed to start a jump
-            this.jumpTimer = 1;
-            this.body.setVelocityY(-200);
-            this.setAnimation('jump');
-            this.body.setOffset(8, 2);
-            willJump = true;
-        } else if (
-            this.jumpTimer !== 0
-            && (
-                this.controlKeys.up.isDown
-                || this.controlKeys.w.isDown
-            )) {
-            // player is no longer on the ground, but is still holding the jump key
-            this.jumpTimer += 1;
-            if (this.jumpTimer > 8) {
-                // player has been holding jump for over 100 millliseconds, it's time to stop him
-                this.jumpTimer = 0;
-            } else if (this.jumpTimer > 7) {
-                // player is allowed to jump higher, not yet 600 milliseconds of jumping
-                this.body.setVelocityY(-200);
-            }
-        } else if (this.jumpTimer !== 0) {
-            // reset this.jumpTimer since the player is no longer holding the jump key
-            this.jumpTimer = 0;
-        }
-
-        // Update the animation/texture based on the state of the player
-        if (!willJump && onGround) {
-            this.body.setVelocityY(0);
-            this.body.setOffset(8, 4);
-            if (this.body.velocity.x !== 0) {
-                this.setAnimation('walk');
-            } else {
-                this.setAnimation('idle');
-            }
-        }
-
-        // set player falling animation
-        if (this.body.velocity.y > 0) {
-            this.setFrame('player_jump_05');
-        }
-
-        // handle player attacking
-        if (onGround && Input.Keyboard.JustDown(this.controlKeys.space)) {
-            this.setAnimation('attack');
-            this.body.setVelocityX(0);
-            this.isAttacking = true;
-            this.scene.time.delayedCall(
-                this.attackDuration,
-                () => {
-                    this.isAttacking = false;
-                }
-            );
         }
     }
 }
