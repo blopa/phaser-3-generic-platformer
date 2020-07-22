@@ -41,6 +41,8 @@ class Hero extends GameObjects.Sprite {
         this.startRunDuration = 350;
         this.jumpTimer = 0;
         this.runTimer = 0;
+        this.stopRunTimer = 0;
+        this.delayStopRunning = false;
         this.pressedRunRight = false;
         this.pressedRunLeft = false;
         this.heroState = IDLE;
@@ -340,7 +342,8 @@ class Hero extends GameObjects.Sprite {
             RUNNING_LEFT,
             RUNNING_RIGHT_START,
             RUNNING_LEFT_START,
-        ].includes(this.heroState);
+        ].includes(this.heroState)
+            || this.delayStopRunning;
     }
 
     update(time, delta) {
@@ -374,7 +377,9 @@ class Hero extends GameObjects.Sprite {
                 WALKING_RIGHT,
                 WALKING_LEFT,
                 FALLING,
-            ].includes(this.heroState)) {
+            ].includes(this.heroState)
+                && !this.delayStopRunning
+            ) {
                 this.setHeroState(IDLE);
                 return;
             }
@@ -391,6 +396,7 @@ class Hero extends GameObjects.Sprite {
             } else if (this.runTimer <= 10) {
                 if (this.pressedRunRight && isRightDown && pressedRight) {
                     this.setHeroState(RUNNING_RIGHT_START);
+                    this.delayStopRunning = true;
                     this.scene.time.delayedCall(
                         this.startRunDuration,
                         () => {
@@ -399,6 +405,7 @@ class Hero extends GameObjects.Sprite {
                     );
                 } else if (this.pressedRunLeft && isLeftDown && pressedLeft) {
                     this.setHeroState(RUNNING_LEFT_START);
+                    this.delayStopRunning = true;
                     this.scene.time.delayedCall(
                         this.startRunDuration,
                         () => {
@@ -417,6 +424,19 @@ class Hero extends GameObjects.Sprite {
             }
         }
 
+        if (this.delayStopRunning) {
+            if (!isRightDown && !isLeftDown) {
+                this.stopRunTimer += 1;
+                if (this.stopRunTimer > 6) {
+                    this.delayStopRunning = false;
+                    this.stopRunTimer = 0;
+                }
+            } else if (!isLeftDown && isRightDown && this.heroState === RUNNING_LEFT) {
+                this.setHeroState(RUNNING_RIGHT);
+            } else if (!isRightDown && isLeftDown && this.heroState === RUNNING_RIGHT) {
+                this.setHeroState(RUNNING_LEFT);
+            }
+        }
         const isRunning = this.isHeroRunning();
 
         // Handle hero walking
