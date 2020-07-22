@@ -278,6 +278,7 @@ class Hero extends GameObjects.Sprite {
         this.heroState = heroState;
     }
 
+    // Handle button controllers
     isRightDown() {
         return this.controlKeys.right.isDown
             || this.controlKeys.d.isDown
@@ -347,37 +348,155 @@ class Hero extends GameObjects.Sprite {
         return onGround ? 600 : 200;
     }
 
+    // Handle is hero jumping
     isHeroJumping() {
+        // Is hero jumping? Doesn't the other states
+        return this.isHeroJumpingStraight()
+            || this.isHeroJumpingLeft()
+            || this.isHeroJumpingRight();
+    }
+
+    isHeroJumpingWhileRunning() {
+        return this.isHeroJumpingStraightWhileRunning()
+            || this.isHeroJumpingLeftWhileRunning()
+            || this.isHeroJumpingRightWhileRunning();
+    }
+
+    isHeroJumpingWhileWalking() {
+        return this.isHeroJumpingStraightWhileWalking()
+            || this.isHeroJumpingLeftWhileWalking()
+            || this.isHeroJumpingRightWhileWalking();
+    }
+
+    isHeroJumpingStraight() {
+        return this.isHeroJumpingStraightWhileRunning()
+            || this.isHeroJumpingStraightWhileWalking();
+    }
+
+    isHeroJumpingStraightWhileRunning() {
+        return [
+            RUN_JUMPING_START,
+            RUN_BOOSTING_JUMP,
+            RUN_JUMPING,
+        ].includes(this.heroState);
+    }
+
+    isHeroJumpingStraightWhileWalking() {
         return [
             JUMPING_START,
             BOOSTING_JUMP,
             JUMPING,
-            JUMPING_START_RIGHT,
-            BOOSTING_JUMP_RIGHT,
-            JUMPING_RIGHT,
-            JUMPING_START_LEFT,
-            BOOSTING_JUMP_LEFT,
-            JUMPING_LEFT,
-            RUN_JUMPING_START,
-            RUN_BOOSTING_JUMP,
-            RUN_JUMPING,
-            RUN_JUMPING_START_RIGHT,
-            RUN_BOOSTING_JUMP_RIGHT,
-            RUN_JUMPING_RIGHT,
+        ].includes(this.heroState);
+    }
+
+    isHeroJumpingLeft() {
+        return this.isHeroJumpingLeftWhileRunning()
+            || this.isHeroJumpingLeftWhileWalking();
+    }
+
+    isHeroJumpingLeftWhileRunning() {
+        return [
             RUN_JUMPING_START_LEFT,
             RUN_BOOSTING_JUMP_LEFT,
             RUN_JUMPING_LEFT,
         ].includes(this.heroState);
     }
 
+    isHeroJumpingLeftWhileWalking() {
+        return [
+            JUMPING_START_LEFT,
+            BOOSTING_JUMP_LEFT,
+            JUMPING_LEFT,
+        ].includes(this.heroState);
+    }
+
+    isHeroJumpingRight() {
+        return this.isHeroJumpingRightWhileRunning()
+            || this.isHeroJumpingRightWhileWalking();
+    }
+
+    isHeroJumpingRightWhileRunning() {
+        return [
+            RUN_JUMPING_START_RIGHT,
+            RUN_BOOSTING_JUMP_RIGHT,
+            RUN_JUMPING_RIGHT,
+        ].includes(this.heroState);
+    }
+
+    isHeroJumpingRightWhileWalking() {
+        return [
+            JUMPING_START_RIGHT,
+            BOOSTING_JUMP_RIGHT,
+            JUMPING_RIGHT,
+        ].includes(this.heroState);
+    }
+
     isHeroFalling() {
+        return this.isHeroFallingStraight()
+            || this.isHeroFallingLeft()
+            || this.isHeroFallingRight();
+    }
+
+    isHeroFallingWhileWalking() {
+        return this.isHeroFallingStraightWhileWalking()
+            || this.isHeroFallingLeftWhileWalking()
+            || this.isHeroFallingRightWhileWalking();
+    }
+
+    isHeroFallingWhileRunning() {
+        return this.isHeroFallingStraightWhileRunning()
+            || this.isHeroFallingLeftWhileRunning()
+            || this.isHeroFallingRightWhileRunning();
+    }
+
+    isHeroFallingStraight() {
+        return this.isHeroFallingStraightWhileWalking()
+            || this.isHeroFallingStraightWhileRunning();
+    }
+
+    isHeroFallingStraightWhileWalking() {
         return [
             FALLING,
-            FALLING_RIGHT,
-            FALLING_LEFT,
+        ].includes(this.heroState);
+    }
+
+    isHeroFallingStraightWhileRunning() {
+        return [
             RUN_FALLING,
-            RUN_FALLING_RIGHT,
+        ].includes(this.heroState);
+    }
+
+    isHeroFallingLeft() {
+        return this.isHeroFallingLeftWhileWalking()
+            || this.isHeroFallingLeftWhileRunning();
+    }
+
+    isHeroFallingLeftWhileWalking() {
+        return [
+            FALLING_LEFT,
+        ].includes(this.heroState);
+    }
+
+    isHeroFallingLeftWhileRunning() {
+        return [
             RUN_FALLING_LEFT,
+        ].includes(this.heroState);
+    }
+
+    isHeroFallingRight() {
+        return this.isHeroFallingRightWhileWalking()
+            || this.isHeroFallingRightWhileRunning();
+    }
+
+    isHeroFallingRightWhileWalking() {
+        return [
+            FALLING_RIGHT,
+        ].includes(this.heroState);
+    }
+
+    isHeroFallingRightWhileRunning() {
+        return [
+            RUN_FALLING_RIGHT,
         ].includes(this.heroState);
     }
 
