@@ -30119,28 +30119,6 @@
       "tiles": [
         {
           "id": 0,
-          "objectgroup": {
-            "draworder": "index",
-            "name": "",
-            "objects": [
-              {
-                "height": 16,
-                "id": 1,
-                "name": "",
-                "rotation": 0,
-                "type": "",
-                "visible": true,
-                "width": 16,
-                "x": 0,
-                "y": 0
-              }
-            ],
-            "opacity": 1,
-            "type": "objectgroup",
-            "visible": true,
-            "x": 0,
-            "y": 0
-          },
           "properties": [
             {
               "name": "collidesDown",
@@ -30166,28 +30144,81 @@
         },
         {
           "id": 1,
-          "objectgroup": {
-            "draworder": "index",
-            "name": "",
-            "objects": [
-              {
-                "height": 16,
-                "id": 1,
-                "name": "",
-                "rotation": 0,
-                "type": "",
-                "visible": true,
-                "width": 16,
-                "x": 0,
-                "y": 0
-              }
-            ],
-            "opacity": 1,
-            "type": "objectgroup",
-            "visible": true,
-            "x": 0,
-            "y": 0
-          },
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 4,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 5,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 6,
           "properties": [
             {
               "name": "collidesDown",
@@ -30213,28 +30244,6 @@
         },
         {
           "id": 20,
-          "objectgroup": {
-            "draworder": "index",
-            "name": "",
-            "objects": [
-              {
-                "height": 16,
-                "id": 1,
-                "name": "",
-                "rotation": 0,
-                "type": "",
-                "visible": true,
-                "width": 16,
-                "x": 0,
-                "y": 0
-              }
-            ],
-            "opacity": 1,
-            "type": "objectgroup",
-            "visible": true,
-            "x": 0,
-            "y": 0
-          },
           "properties": [
             {
               "name": "collidesDown",
@@ -30260,28 +30269,6 @@
         },
         {
           "id": 21,
-          "objectgroup": {
-            "draworder": "index",
-            "name": "",
-            "objects": [
-              {
-                "height": 16,
-                "id": 1,
-                "name": "",
-                "rotation": 0,
-                "type": "",
-                "visible": true,
-                "width": 16,
-                "x": 0,
-                "y": 0
-              }
-            ],
-            "opacity": 1,
-            "type": "objectgroup",
-            "visible": true,
-            "x": 0,
-            "y": 0
-          },
           "properties": [
             {
               "name": "collidesDown",
@@ -30306,6 +30293,477 @@
           ]
         },
         {
+          "id": 25,
+          "objectgroup": {
+            "draworder": "index",
+            "id": 2,
+            "name": "",
+            "objects": [
+              {
+                "height": 9,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 3,
+                "x": 13,
+                "y": 0
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          },
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 26,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 27,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 28,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 29,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 30,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 31,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 32,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 33,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 34,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 35,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 36,
+          "objectgroup": {
+            "draworder": "index",
+            "id": 2,
+            "name": "",
+            "objects": [
+              {
+                "height": 9,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 3,
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          },
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 40,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 41,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 62,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 63,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 64,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
           "id": 120,
           "objectgroup": {
             "draworder": "index",
@@ -30313,7 +30771,7 @@
             "objects": [
               {
                 "height": 5,
-                "id": 1,
+                "id": 7,
                 "name": "",
                 "rotation": 0,
                 "type": "",
@@ -30403,6 +30861,7 @@
           "id": 122,
           "objectgroup": {
             "draworder": "index",
+            "id": 2,
             "name": "",
             "objects": [
               {
@@ -30450,6 +30909,7 @@
           "id": 123,
           "objectgroup": {
             "draworder": "index",
+            "id": 2,
             "name": "",
             "objects": [
               {
@@ -30497,6 +30957,7 @@
           "id": 124,
           "objectgroup": {
             "draworder": "index",
+            "id": 2,
             "name": "",
             "objects": [
               {
@@ -30544,6 +31005,7 @@
           "id": 125,
           "objectgroup": {
             "draworder": "index",
+            "id": 2,
             "name": "",
             "objects": [
               {

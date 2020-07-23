@@ -21,6 +21,8 @@ export const isset = (...args) => {
     return true;
 };
 
+export const isBoolean = (val) => typeof val === 'boolean';
+
 /**
  * @this Phaser.GameObject.Sprite
  */
