@@ -290,9 +290,8 @@ class Hero extends GameObjects.Sprite {
     setHeroState(heroState) {
         if (IS_DEV && this.heroState !== heroState) {
             console.log(heroState);
-            // this.debugText.setText(heroState);
+            this.debugText.setText(heroState);
         }
-        this.debugText.setText(this.body.acceleration.x);
         this.heroState = heroState;
     }
 
@@ -361,18 +360,23 @@ class Hero extends GameObjects.Sprite {
             || Input.Keyboard.JustDown(this.controlKeys.gamepadB);
     }
 
-    getHeroAcceleration() {
+    calculateHeroAccelerationX() {
+        if (this.isHeroRunning()) {
+            this.body.setMaxVelocity(250, 400);
+            return 600;
+        }
+
         this.body.setMaxVelocity(150, 400);
         if (this.isHeroJumping() || this.isHeroFalling()) {
             return 200;
         }
 
-        if (this.isHeroRunning()) {
-            this.body.setMaxVelocity(300, 400);
-            return 800;
-        }
-
         return 600;
+    }
+
+    calculateHeroAccelerationY() {
+        this.body.setMaxVelocity(150, 400);
+        return 200;
     }
 
     // Handle is hero jumping
@@ -837,7 +841,8 @@ class Hero extends GameObjects.Sprite {
 
     handleHeroMovement() {
         const { heroState } = this;
-        const acceleration = this.getHeroAcceleration();
+        const accelerationY = this.calculateHeroAccelerationY();
+        const accelerationX = this.calculateHeroAccelerationX();
         const heroOnGround = this.isHeroOnGround();
 
         if (heroOnGround) {
@@ -848,22 +853,22 @@ class Hero extends GameObjects.Sprite {
 
         // Handle walking movement
         if (heroState === WALKING_RIGHT) {
-            this.body.setAccelerationX(acceleration);
+            this.body.setAccelerationX(accelerationX);
         } else if (heroState === WALKING_LEFT) {
-            this.body.setAccelerationX(-acceleration);
+            this.body.setAccelerationX(-accelerationX);
         }
 
         // Handle running movement
         if (heroState === RUNNING_RIGHT_START) {
-            this.body.setAccelerationX(acceleration);
+            this.body.setAccelerationX(accelerationX);
         } else if (heroState === RUNNING_LEFT_START) {
-            this.body.setAccelerationX(-acceleration);
+            this.body.setAccelerationX(-accelerationX);
         }
 
         if (heroState === RUNNING_RIGHT) {
-            this.body.setAccelerationX(acceleration);
+            this.body.setAccelerationX(accelerationX);
         } else if (heroState === RUNNING_LEFT) {
-            this.body.setAccelerationX(-acceleration);
+            this.body.setAccelerationX(-accelerationX);
         }
 
         // Handle jumping movement
@@ -882,7 +887,7 @@ class Hero extends GameObjects.Sprite {
             RUN_BOOSTING_JUMP_LEFT,
         ].includes(heroState)) {
             // does not includes the JUMPING status
-            this.body.setVelocityY(-acceleration);
+            this.body.setVelocityY(-accelerationY);
         }
 
         if ([
@@ -893,7 +898,7 @@ class Hero extends GameObjects.Sprite {
             RUN_JUMPING_START_RIGHT,
             RUN_BOOSTING_JUMP_RIGHT,
         ].includes(heroState)) {
-            this.body.setAccelerationX(acceleration);
+            this.body.setAccelerationX(accelerationX);
         }
 
         if ([
@@ -904,7 +909,7 @@ class Hero extends GameObjects.Sprite {
             RUN_JUMPING_START_LEFT,
             RUN_BOOSTING_JUMP_LEFT,
         ].includes(heroState)) {
-            this.body.setAccelerationX(-acceleration);
+            this.body.setAccelerationX(-accelerationX);
         }
 
         // Handle idle movement

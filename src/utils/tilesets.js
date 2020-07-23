@@ -6,10 +6,10 @@ import { isset } from './utils';
 
 export const getTilesetCustomColliders = (scene, tilesetLayer) => {
     const customColliders = [];
-    tilesetLayer.tilemap.layer.data.forEach((tiles) => {
+    tilesetLayer.data.forEach((tiles) => {
         tiles.forEach((tile) => {
             const { index } = tile;
-            const tilesetCustomColliders = tilesetLayer.tileset[0].tileData[index - 1];
+            const tilesetCustomColliders = tilesetLayer.tilemapLayer.tileset[0].tileData[index - 1];
             // check if we have a tileset on that position
             // and if it has custom colliders
             if (index !== -1 && tilesetCustomColliders) {
@@ -17,7 +17,7 @@ export const getTilesetCustomColliders = (scene, tilesetLayer) => {
                 const { objects } = objectgroup;
                 objects.forEach((objectData) => {
                     const { height, width, x, y } = objectData;
-                    const properties = tilesetLayer.tileset[0].tileProperties[index - 1];
+                    const properties = tilesetLayer.tilemapLayer.tileset[0].tileProperties[index - 1];
                     const {
                         collidesLeft,
                         collidesRight,
@@ -66,7 +66,7 @@ export const getTilesetCustomColliders = (scene, tilesetLayer) => {
     return new GameGroup({
         scene,
         children: customColliders,
-        name: tilesetLayer.tileset[0].name,
+        name: tilesetLayer.name,
     });
 };
 
@@ -80,19 +80,25 @@ export const createMapWithDynamicLayers = (
     const map = makeTilemap(scene, tilesetKey);
     const tileset = createMapTileset(map, tilesetName, tilesetImageKey);
     const layers = [];
+    const dynamicLayers = [];
     if (isset(layerNames)) {
         layerNames.forEach((layerName) => {
-            layers[layerName] = createMapDynamicLayer(map, layerName, tileset);
+            const dynamicLayer = createMapDynamicLayer(map, layerName, tileset);
+            layers[layerName] = dynamicLayers[layerName].tilemap.layers
+                .filter((layer) => layer.name === layerName);
+            dynamicLayers[layerName] = dynamicLayer;
         });
     } else {
         map.layers.forEach((layer) => {
-            layers[layer.name] = createMapDynamicLayer(map, layer.name, tileset);
+            layers[layer.name] = layer;
+            dynamicLayers[layer.name] = createMapDynamicLayer(map, layer.name, tileset);
         });
     }
 
     return {
         map,
         layers,
+        dynamicLayers,
     };
 };
 

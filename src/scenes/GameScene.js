@@ -23,18 +23,17 @@ class GameScene extends Scene {
         this.player.body.setCollideWorldBounds(true); // don't go out of the map
 
         // load the map
-        const { map, layers } = createMapWithDynamicLayers(
+        const { map, layers, dynamicLayers } = createMapWithDynamicLayers(
             this,
-            'city_01',
+            'city_03',
             'city_tileset',
             'city_tileset'
         );
-        const testsLayer = layers.tests;
-        const detailsLayer = layers.details;
-        const mapCustomColliders = getTilesetCustomColliders(this, testsLayer);
-        this.physics.add.collider(testsLayer, this.player);
+
+        const detailsLayer = dynamicLayers.details;
+        const mapCustomColliders = getTilesetCustomColliders(this, layers.details);
+        this.physics.add.collider(detailsLayer, this.player);
         this.physics.add.collider(mapCustomColliders, this.player);
-        // this.physics.world.addCollider(this.player, testsLayer);
         // this.physics.world.addCollider(this.player, mapCustomColliders);
 
         // set the boundaries of our game world
