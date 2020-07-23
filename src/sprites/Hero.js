@@ -256,6 +256,23 @@ class Hero extends GameObjects.Sprite {
                 repeat: -1,
             });
         }
+
+        if (!this.scene.anims.exists(`${assetKey}_run_jump`)) {
+            this.scene.anims.create({
+                key: `${assetKey}_run_jump`,
+                frames: this.scene.anims.generateFrameNames(assetKey, {
+                    frames: [
+                        'player_run_jump_01',
+                        'player_run_jump_02',
+                        'player_run_jump_03',
+                        'player_run_jump_04',
+                        'player_run_jump_05',
+                    ],
+                }),
+                frameRate: 12,
+                repeat: -1,
+            });
+        }
     };
 
     setAnimation = (animationName, ignoreIfPlaying = true) => {
@@ -273,8 +290,9 @@ class Hero extends GameObjects.Sprite {
     setHeroState(heroState) {
         if (IS_DEV && this.heroState !== heroState) {
             console.log(heroState);
-            this.debugText.setText(heroState);
+            // this.debugText.setText(heroState);
         }
+        this.debugText.setText(this.body.acceleration.x);
         this.heroState = heroState;
     }
 
@@ -344,8 +362,17 @@ class Hero extends GameObjects.Sprite {
     }
 
     getHeroAcceleration() {
-        const onGround = this.body.blocked.down || this.body.touching.down;
-        return onGround ? 600 : 200;
+        this.body.setMaxVelocity(150, 400);
+        if (this.isHeroJumping() || this.isHeroFalling()) {
+            return 200;
+        }
+
+        if (this.isHeroRunning()) {
+            this.body.setMaxVelocity(300, 400);
+            return 800;
+        }
+
+        return 600;
     }
 
     // Handle is hero jumping
@@ -760,6 +787,14 @@ class Hero extends GameObjects.Sprite {
             this.setHeroState(newHeroState);
         }
 
+        // If it's already jumping and pressed the jump button
+        // bail
+        if (isJumping) {
+            if (this.isUpJustDown() || this.isAButtonJustDown()) {
+                return;
+            }
+        }
+
         // Handle hero falling
         if (!this.isHeroFalling() && this.body.velocity.y > 0 && !this.isHeroOnGround()) {
             if (this.isHeroRunning()) {
@@ -914,23 +949,19 @@ class Hero extends GameObjects.Sprite {
         }
 
         // Handle jumping animation
-        if ([
-            JUMPING_START,
-            BOOSTING_JUMP,
-            JUMPING,
-            JUMPING_START_RIGHT,
-            BOOSTING_JUMP_RIGHT,
-            JUMPING_RIGHT,
-            JUMPING_START_LEFT,
-            BOOSTING_JUMP_LEFT,
-            JUMPING_LEFT,
-        ].includes(heroState)) {
-            this.setAnimation('jump');
+        if (this.isHeroJumping()) {
+            if (this.isHeroRunning()) {
+                this.setAnimation('run_jump');
+            } else {
+                this.setAnimation('jump');
+            }
         }
 
         // Handle falling animation
         if (this.isHeroFalling()) {
-            if (!this.isHeroRunning()) {
+            if (this.isHeroRunning()) {
+                this.setFrame('player_run_falling_01');
+            } else {
                 this.setFrame('player_jump_05');
             }
         }
