@@ -504,16 +504,18 @@ class Hero extends GameObjects.Sprite {
         return this.body.blocked.down || this.body.touching.down;
     }
 
-    // TODO todas essas aqui
-    isHeroRunning_new() {
+    isHeroRunning() {
         // Is hero running? Doesn't the other states
-        return this.isHeroRunningLeft()
-            || this.isHeroRunningRight();
+        return this.isHeroRunningRight()
+            || this.isHeroRunningLeft()
+            || this.isHeroRunningWhileFallingStraight()
+            || this.delayStopRunning;
     }
 
     isHeroRunningRight() {
         return this.isHeroRunningRightWhileJumping()
-            || this.isHeroWalkingRightWhileJumping();
+            || this.isHeroRunningRightOnGround()
+        || this.isHeroRunningRightWhileFalling();
     }
 
     isHeroRunningRightWhileJumping() {
@@ -524,15 +526,23 @@ class Hero extends GameObjects.Sprite {
         ].includes(this.heroState);
     }
 
-    isHeroWalkingRightWhileJumping() {
+    isHeroRunningRightOnGround() {
         return [
-            // TODO
+            RUNNING_RIGHT,
+            RUNNING_RIGHT_START,
+        ].includes(this.heroState);
+    }
+
+    isHeroRunningRightWhileFalling() {
+        return [
+            RUN_FALLING_RIGHT,
         ].includes(this.heroState);
     }
 
     isHeroRunningLeft() {
         return this.isHeroRunningLeftWhileJumping()
-            || this.isHeroWalkingLeftWhileJumping();
+            || this.isHeroRunningLeftWhileOnGround()
+            || this.isHeroRunningLeftWhileFalling();
     }
 
     isHeroRunningLeftWhileJumping() {
@@ -543,41 +553,27 @@ class Hero extends GameObjects.Sprite {
         ].includes(this.heroState);
     }
 
-    isHeroWalkingLeftWhileJumping() {
+    isHeroRunningLeftWhileOnGround() {
         return [
-            // TODO
+            RUNNING_LEFT,
+            RUNNING_LEFT_START,
         ].includes(this.heroState);
     }
 
-    isHeroRunning() {
+    isHeroRunningLeftWhileFalling() {
         return [
-            RUNNING_RIGHT,
-            RUNNING_LEFT,
-            RUNNING_RIGHT_START,
-            RUNNING_LEFT_START,
-            RUN_JUMPING_START,
-            RUN_JUMPING,
-            RUN_JUMPING_RIGHT,
-            RUN_JUMPING_LEFT,
-            RUN_BOOSTING_JUMP,
-            RUN_BOOSTING_JUMP_RIGHT,
-            RUN_BOOSTING_JUMP_LEFT,
-            RUN_JUMPING_START_RIGHT,
-            RUN_JUMPING_START_LEFT,
-            RUN_FALLING,
-            RUN_FALLING_RIGHT,
             RUN_FALLING_LEFT,
-        ].includes(this.heroState)
-            || this.delayStopRunning;
+        ].includes(this.heroState);
+    }
+
+    isHeroRunningWhileFallingStraight() {
+        return this.heroState === RUN_FALLING;
     }
 
     update(time, delta) {
         if (IS_DEV) {
             this.debugText.setX(this.x);
             this.debugText.setY(this.y - 50);
-            if (this.y < 370) {
-                debugger;
-            }
         }
 
         this.handleHeroState();
