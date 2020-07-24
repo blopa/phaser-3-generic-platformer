@@ -25,7 +25,7 @@ class GameScene extends Scene {
         // load the map
         const { map, layers, dynamicLayers } = createMapWithDynamicLayers(
             this,
-            'city_03',
+            'city_04',
             'city_tileset',
             'city_tileset'
         );
