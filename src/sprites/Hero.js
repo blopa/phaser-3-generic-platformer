@@ -613,7 +613,6 @@ class Hero extends GameObjects.Sprite {
     }
 
     handleHeroState() {
-        const heroOnGround = this.isHeroOnGround();
         const isRightDown = this.isRightDown();
         const isLeftDown = this.isLeftDown();
         const isUpDown = this.isUpDown();
@@ -623,7 +622,7 @@ class Hero extends GameObjects.Sprite {
         const isJumping = this.isHeroJumping();
 
         // Handle hero idle
-        if (heroOnGround && !isRightDown && !isLeftDown && !this.delayStopRunning) {
+        if (this.isHeroOnGround() && !isRightDown && !isLeftDown && !this.delayStopRunning) {
             if (([
                 RUNNING_RIGHT_START,
                 RUNNING_LEFT_START,
@@ -708,7 +707,7 @@ class Hero extends GameObjects.Sprite {
         }
 
         // Handle hero walking
-        if (heroOnGround && !isJumping && !this.isHeroRunning()) {
+        if (this.isHeroOnGround() && !isJumping && !this.isHeroRunning()) {
             if (isRightDown) {
                 this.setHeroState(WALKING_RIGHT);
             } else if (isLeftDown) {
@@ -717,7 +716,7 @@ class Hero extends GameObjects.Sprite {
         }
 
         // Handle hero jumping
-        if (heroOnGround && (this.isUpJustDown() || this.isAButtonJustDown())) {
+        if (this.isHeroOnGround() && (this.isUpJustDown() || this.isAButtonJustDown())) {
             this.jumpTimer = 1;
             let newHeroState = JUMPING_START;
             if (this.isHeroRunning()) {
@@ -834,7 +833,7 @@ class Hero extends GameObjects.Sprite {
         }
 
         // handle hero attacking
-        if (heroOnGround && this.isBButtonJustDown()) {
+        if (this.isHeroOnGround() && this.isBButtonJustDown()) {
             this.setHeroState(ATTACKING_START);
         }
     }
@@ -843,9 +842,8 @@ class Hero extends GameObjects.Sprite {
         const { heroState } = this;
         const accelerationY = this.calculateHeroAccelerationY();
         const accelerationX = this.calculateHeroAccelerationX();
-        const heroOnGround = this.isHeroOnGround();
 
-        if (heroOnGround) {
+        if (this.isHeroOnGround()) {
             if (!this.isHeroRunning()) {
                 this.body.setVelocityY(0);
             }
@@ -925,11 +923,11 @@ class Hero extends GameObjects.Sprite {
         if (heroState === WALKING_RIGHT) {
             this.setAnimation('walk');
             this.setFlipX(false);
-            this.body.setOffset(8, 4); // TODO
+            this.body.setOffset(10, 4); // TODO
         } else if (heroState === WALKING_LEFT) {
             this.setAnimation('walk');
             this.setFlipX(true);
-            this.body.setOffset(6, 4); // TODO
+            this.body.setOffset(4, 4); // TODO
         }
 
         // Handle running animation
@@ -955,6 +953,7 @@ class Hero extends GameObjects.Sprite {
 
         // Handle jumping animation
         if (this.isHeroJumping()) {
+            this.body.setOffset(8, 2);
             if (this.isHeroRunning()) {
                 this.setAnimation('run_jump');
             } else {
@@ -964,6 +963,7 @@ class Hero extends GameObjects.Sprite {
 
         // Handle falling animation
         if (this.isHeroFalling()) {
+            this.body.setOffset(8, 2);
             if (this.isHeroRunning()) {
                 this.setFrame('player_run_falling_01');
             } else {
@@ -974,6 +974,7 @@ class Hero extends GameObjects.Sprite {
         // Handle idle animation
         if (heroState === IDLE) {
             this.setAnimation('idle');
+            this.body.setOffset(8, 4); // TODO
         }
     }
 }
