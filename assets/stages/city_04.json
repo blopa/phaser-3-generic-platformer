@@ -48230,6 +48230,106 @@
           ]
         },
         {
+          "id": 8,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 9,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 11,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 12,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
           "id": 20,
           "properties": [
             {
@@ -49329,6 +49429,300 @@
                 "width": 3,
                 "x": 0,
                 "y": 13
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          },
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 190,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 191,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 192,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 193,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 210,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 211,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 212,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 213,
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": true
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 240,
+          "objectgroup": {
+            "draworder": "index",
+            "name": "",
+            "objects": [
+              {
+                "height": 2,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 1,
+                "x": 15,
+                "y": 14
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          },
+          "properties": [
+            {
+              "name": "collidesDown",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesLeft",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesRight",
+              "type": "bool",
+              "value": false
+            },
+            {
+              "name": "collidesUp",
+              "type": "bool",
+              "value": true
+            }
+          ]
+        },
+        {
+          "id": 241,
+          "objectgroup": {
+            "draworder": "index",
+            "name": "",
+            "objects": [
+              {
+                "height": 2,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 16,
+                "x": 0,
+                "y": 14
               }
             ],
             "opacity": 1,
