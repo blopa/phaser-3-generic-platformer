@@ -2,7 +2,7 @@
 import { GameObjects, Tilemaps } from 'phaser';
 import { TILESET_HEIGHT, TILESET_WIDTH } from '../constants/constants';
 import GameGroup from '../sprites/Prefabs/GameGroup';
-import { isset, isBoolean } from './utils';
+import {isset, isBoolean, getDegreeFromRadians, rotateRectangleInsideTile} from './utils';
 
 export const getTilesetCustomColliders = (scene, tilesetLayer) => {
     const customColliders = [];
@@ -12,13 +12,14 @@ export const getTilesetCustomColliders = (scene, tilesetLayer) => {
             // check if we have a tileset on that position
             // and if it has custom colliders
             if (index !== -1) {
+                const { properties } = tile;
                 const tilesetCustomColliders = tilesetLayer.tilemapLayer.tileset[0].getTileData(index);
-                const properties = tilesetLayer.tilemapLayer.tileset[0].getTileProperties(index);
                 if (tilesetCustomColliders) {
                     const { objectgroup } = tilesetCustomColliders;
                     const { objects } = objectgroup;
                     objects.forEach((objectData) => {
-                        const { height, width, x, y } = objectData;
+                        let { height, width, x, y } = objectData;
+                        console.log(JSON.stringify({x, y}));
                         const {
                             collidesLeft,
                             collidesRight,
@@ -32,6 +33,17 @@ export const getTilesetCustomColliders = (scene, tilesetLayer) => {
                             tile.setCollision(collidesLeft, collidesRight, collidesUp, collidesDown);
                             return;
                         }
+
+                        const { rotation, flipX, flipY } = tile;
+                        if (flipX) {
+                            x = TILESET_WIDTH - (x + width);
+                        }
+                        if (flipY) {
+                            y = TILESET_HEIGHT - (y + height);
+                        }
+
+                        const degree = getDegreeFromRadians(rotation);
+                        [x, y, width, height] = rotateRectangleInsideTile(x, y, width, height, degree);
 
                         const customCollider = new GameObjects.Rectangle(
                             scene,

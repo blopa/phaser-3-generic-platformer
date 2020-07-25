@@ -1,5 +1,6 @@
 import { Scene } from 'phaser';
 import stageSelector from '../../assets/images/stage_selector.png';
+import dayBackground from '../../assets/images/day_background.png';
 import { getGlobal } from '../utils/globals';
 
 class LoadAssetsScene extends Scene {
@@ -10,6 +11,7 @@ class LoadAssetsScene extends Scene {
     preload() {
         // load your assets
         this.load.image('stage_selector', stageSelector);
+        this.load.image('day_background', dayBackground);
 
         // Tileset images
         const tilesetImages = getGlobal('GAME_TILESET_IMAGES');

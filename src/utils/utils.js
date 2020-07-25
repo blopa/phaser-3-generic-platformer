@@ -1,3 +1,5 @@
+import { TILESET_HEIGHT, TILESET_WIDTH } from '../constants/constants';
+
 export const isObjectEmpty = (obj) =>
     obj !== null
     && typeof obj === 'object'
@@ -21,7 +23,46 @@ export const isset = (...args) => {
     return true;
 };
 
+export const getDegreeFromRadians = (radians) => (radians * (180 / Math.PI));
+
+export const getRadiansFromDegree = (degree) => (degree * (Math.PI / 180));
+
 export const isBoolean = (val) => typeof val === 'boolean';
+
+export const rotateRectangleInsideTile = (x, y, width, height, degree) => {
+    switch (degree) {
+        case 90: {
+            return [
+                TILESET_HEIGHT - (y + height),
+                x,
+                height,
+                width,
+            ];
+        }
+
+        case 180: {
+            return [
+                TILESET_WIDTH - (x + width),
+                TILESET_HEIGHT - (y + height),
+                width,
+                height,
+            ];
+        }
+
+        case 270: {
+            return [
+                y,
+                TILESET_WIDTH - (x + width),
+                height,
+                width,
+            ];
+        }
+
+        default: {
+            return [x, y, width, height];
+        }
+    }
+};
 
 /**
  * @this Phaser.GameObject.Sprite

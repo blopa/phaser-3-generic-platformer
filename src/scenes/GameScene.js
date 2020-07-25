@@ -1,6 +1,7 @@
 import { Scene } from 'phaser';
 import { createMapWithDynamicLayers, getMapObjectLayer, getTilesetCustomColliders } from '../utils/tilesets';
 import Hero from '../sprites/Hero';
+import Background from "../sprites/Background";
 
 class GameScene extends Scene {
     constructor() {
@@ -16,6 +17,11 @@ class GameScene extends Scene {
     }
 
     create() {
+        this.background = new Background({
+            scene: this,
+            asset: 'day_background',
+        });
+
         this.player = new Hero({
             scene: this,
         });
@@ -30,15 +36,17 @@ class GameScene extends Scene {
             'city_tileset'
         );
 
-        const detailsLayer = dynamicLayers.details;
-        const mapCustomColliders = getTilesetCustomColliders(this, layers.details);
-        this.physics.add.collider(detailsLayer, this.player);
-        this.physics.add.collider(mapCustomColliders, this.player);
+        const mapGroundColliders = getTilesetCustomColliders(this, layers.ground);
+        const mapElementsColliders = getTilesetCustomColliders(this, layers.elements);
+        this.physics.add.collider(dynamicLayers.ground, this.player);
+        this.physics.add.collider(dynamicLayers.elements, this.player);
+        this.physics.add.collider(mapGroundColliders, this.player);
+        this.physics.add.collider(mapElementsColliders, this.player);
         // this.physics.world.addCollider(this.player, mapCustomColliders);
 
         // set the boundaries of our game world
-        this.physics.world.bounds.width = detailsLayer.width;
-        this.physics.world.bounds.height = detailsLayer.height;
+        this.physics.world.bounds.width = dynamicLayers.background.width;
+        this.physics.world.bounds.height = dynamicLayers.background.height;
 
         // set bounds so the camera won't go outside the game world
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
