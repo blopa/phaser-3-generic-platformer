@@ -31,12 +31,13 @@ class GameScene extends Scene {
         this.player.body.setCollideWorldBounds(true); // don't go out of the map
 
         // load the map
-        const { map, layers, dynamicLayers } = createMapWithDynamicLayers(
+        this.mapData = createMapWithDynamicLayers(
             this,
             'city_01',
             'city_tileset',
             'city_tileset'
         );
+        const { map, layers, dynamicLayers } = this.mapData;
 
         const mapGroundColliders = getTilesetCustomColliders(this, layers.ground);
         const mapElementsColliders = getTilesetCustomColliders(this, layers.elements);
@@ -83,6 +84,17 @@ class GameScene extends Scene {
 
     update(time, delta) {
         this.player.update(time, delta);
+        // TODO
+        const { dynamicLayers } = this.mapData;
+        dynamicLayers.background.setX(
+            this.cameras.main.scrollX * 0.3
+        );
+        dynamicLayers.foreground.setX(
+            this.cameras.main.scrollX * -0.1
+        );
+        dynamicLayers.foreground_2.setX(
+            this.cameras.main.scrollX * -0.3
+        );
     }
 }
 
