@@ -623,16 +623,30 @@ class Hero extends GameObjects.Sprite {
         const isJumping = this.isHeroJumping();
 
         // Handle hero idle
-        if (this.isHeroOnGround() && !isRightDown && !isLeftDown && !this.delayStopRunning) {
+        if (this.isHeroOnGround() && !this.delayStopRunning) {
+            if (!isRightDown && !isLeftDown) {
+                if (([
+                    RUNNING_RIGHT_START,
+                    RUNNING_LEFT_START,
+                    RUNNING_RIGHT,
+                    RUNNING_LEFT,
+                    WALKING_RIGHT,
+                    WALKING_LEFT,
+                ].includes(this.heroState)
+                    || this.isHeroFalling()
+                )) {
+                    this.setHeroState(IDLE);
+                    return;
+                }
+            }
+
+            // This fixes the bug when jumping
+            // up a wall or something with collidesUp only true
             if (([
-                RUNNING_RIGHT_START,
-                RUNNING_LEFT_START,
-                RUNNING_RIGHT,
-                RUNNING_LEFT,
-                WALKING_RIGHT,
-                WALKING_LEFT,
+                JUMPING,
+                JUMPING_RIGHT,
+                JUMPING_LEFT,
             ].includes(this.heroState)
-                || this.isHeroFalling()
             )) {
                 this.setHeroState(IDLE);
                 return;
