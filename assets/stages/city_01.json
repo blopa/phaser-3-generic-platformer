@@ -2115,6 +2115,13 @@
             "id": 1,
             "name": "background",
             "opacity": 1,
+            "properties": [
+                {
+                    "name": "parallaxSpeedX",
+                    "type": "float",
+                    "value": 0.3
+                }
+            ],
             "type": "tilelayer",
             "visible": true,
             "width": 150,
@@ -4228,6 +4235,13 @@
             "id": 2,
             "name": "ground",
             "opacity": 1,
+            "properties": [
+                {
+                    "name": "parallaxSpeedX",
+                    "type": "float",
+                    "value": 1
+                }
+            ],
             "type": "tilelayer",
             "visible": true,
             "width": 150,
@@ -6341,6 +6355,13 @@
             "id": 4,
             "name": "elements",
             "opacity": 1,
+            "properties": [
+                {
+                    "name": "parallaxSpeedX",
+                    "type": "float",
+                    "value": 1
+                }
+            ],
             "type": "tilelayer",
             "visible": true,
             "width": 150,
@@ -8454,6 +8475,13 @@
             "id": 5,
             "name": "foreground",
             "opacity": 1,
+            "properties": [
+                {
+                    "name": "parallaxSpeedX",
+                    "type": "float",
+                    "value": -0.1
+                }
+            ],
             "type": "tilelayer",
             "visible": true,
             "width": 150,
@@ -10567,6 +10595,13 @@
             "id": 6,
             "name": "foreground_2",
             "opacity": 1,
+            "properties": [
+                {
+                    "name": "parallaxSpeedX",
+                    "type": "float",
+                    "value": -0.3
+                }
+            ],
             "type": "tilelayer",
             "visible": true,
             "width": 150,

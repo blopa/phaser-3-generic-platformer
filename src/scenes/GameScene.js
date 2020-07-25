@@ -37,10 +37,10 @@ class GameScene extends Scene {
             'city_tileset',
             'city_tileset'
         );
-        const { map, layers, dynamicLayers } = this.mapData;
+        const { map, dynamicLayers } = this.mapData;
 
-        const mapGroundColliders = getTilesetCustomColliders(this, layers.ground);
-        const mapElementsColliders = getTilesetCustomColliders(this, layers.elements);
+        const mapGroundColliders = getTilesetCustomColliders(this, dynamicLayers.ground.layer);
+        const mapElementsColliders = getTilesetCustomColliders(this, dynamicLayers.elements.layer);
         this.physics.add.collider(dynamicLayers.ground, this.player);
         this.physics.add.collider(dynamicLayers.elements, this.player);
         this.physics.add.collider(mapGroundColliders, this.player);
@@ -84,17 +84,23 @@ class GameScene extends Scene {
 
     update(time, delta) {
         this.player.update(time, delta);
-        // TODO
         const { dynamicLayers } = this.mapData;
-        dynamicLayers.background.setX(
-            this.cameras.main.scrollX * 0.3
-        );
-        dynamicLayers.foreground.setX(
-            this.cameras.main.scrollX * -0.1
-        );
-        dynamicLayers.foreground_2.setX(
-            this.cameras.main.scrollX * -0.3
-        );
+        Object.values(dynamicLayers).forEach((dynamicLayer) => {
+            dynamicLayer.layer.properties.forEach((property) => {
+                const { name, value } = property;
+                if (value !== 1) {
+                    if (name === 'parallaxSpeedX') {
+                        dynamicLayer.setX(
+                            this.cameras.main.scrollX * value
+                        );
+                    } else if (name === 'parallaxSpeedY') {
+                        dynamicLayer.setY(
+                            this.cameras.main.scrollY * value
+                        );
+                    }
+                }
+            });
+        });
     }
 }
 
