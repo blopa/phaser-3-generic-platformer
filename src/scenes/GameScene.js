@@ -22,6 +22,7 @@ class GameScene extends Scene {
             scene: this,
             asset: 'day_background',
         });
+        this.add.existing(this.background);
 
         this.player = new Hero({
             scene: this,
@@ -54,6 +55,9 @@ class GameScene extends Scene {
         // set the boundaries of our game world
         this.physics.world.bounds.width = dynamicLayers.background.width;
         this.physics.world.bounds.height = dynamicLayers.background.height;
+        this.background.setScale(
+            this.physics.world.bounds.width
+        );
 
         // set bounds so the camera won't go outside the game world
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);

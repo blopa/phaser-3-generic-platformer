@@ -19,7 +19,6 @@ export const getTilesetCustomColliders = (scene, tilesetLayer) => {
                     const { objects } = objectgroup;
                     objects.forEach((objectData) => {
                         let { height, width, x, y } = objectData;
-                        console.log(JSON.stringify({ x, y }));
                         const {
                             collidesLeft,
                             collidesRight,
