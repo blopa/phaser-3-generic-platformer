@@ -25462,78 +25462,53 @@
         },
         {
           "id": 190,
-          "properties": [
-            {
-              "name": "collidesDown",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesLeft",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesRight",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesUp",
-              "type": "bool",
-              "value": true
-            }
-          ]
-        },
-        {
-          "id": 191,
-          "properties": [
-            {
-              "name": "collidesDown",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesLeft",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesRight",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesUp",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "objectgroup": {
+            "draworder": "index",
+            "name": "",
+            "objects": [
+              {
+                "height": 10,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 3,
+                "x": 0,
+                "y": 1
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          }
         },
         {
           "id": 192,
-          "properties": [
-            {
-              "name": "collidesDown",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesLeft",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesRight",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesUp",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "objectgroup": {
+            "draworder": "index",
+            "name": "",
+            "objects": [
+              {
+                "height": 11,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 11,
+                "x": 5,
+                "y": 0
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          }
         },
         {
           "id": 193,
@@ -25562,103 +25537,78 @@
         },
         {
           "id": 210,
-          "properties": [
-            {
-              "name": "collidesDown",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesLeft",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesRight",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesUp",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "objectgroup": {
+            "draworder": "index",
+            "name": "",
+            "objects": [
+              {
+                "height": 16,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 10,
+                "x": 0,
+                "y": 0
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          }
         },
         {
           "id": 211,
-          "properties": [
-            {
-              "name": "collidesDown",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesLeft",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesRight",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesUp",
-              "type": "bool",
-              "value": true
-            }
-          ]
-        },
-        {
-          "id": 212,
-          "properties": [
-            {
-              "name": "collidesDown",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesLeft",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesRight",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesUp",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "objectgroup": {
+            "draworder": "index",
+            "name": "",
+            "objects": [
+              {
+                "height": 7,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 7,
+                "x": 0,
+                "y": 9
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          }
         },
         {
           "id": 213,
-          "properties": [
-            {
-              "name": "collidesDown",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesLeft",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesRight",
-              "type": "bool",
-              "value": true
-            },
-            {
-              "name": "collidesUp",
-              "type": "bool",
-              "value": true
-            }
-          ]
+          "objectgroup": {
+            "draworder": "index",
+            "name": "",
+            "objects": [
+              {
+                "height": 16,
+                "id": 1,
+                "name": "",
+                "rotation": 0,
+                "type": "",
+                "visible": true,
+                "width": 9,
+                "x": 7,
+                "y": 0
+              }
+            ],
+            "opacity": 1,
+            "type": "objectgroup",
+            "visible": true,
+            "x": 0,
+            "y": 0
+          }
         },
         {
           "id": 240,

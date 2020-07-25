@@ -1,6 +1,7 @@
 /* globals IS_DEV */
 import { GameObjects, Input } from 'phaser';
 import { isset } from '../utils/utils';
+import { HERO_DEPTH } from '../constants/constants';
 
 // Running
 const RUNNING_RIGHT = 'RUNNING_RIGHT';
@@ -61,7 +62,7 @@ class Hero extends GameObjects.Sprite {
         frame,
     }) {
         super(scene, x, y, asset, frame);
-        this.setDepth(500);
+        this.setDepth(HERO_DEPTH);
         this.setOrigin(0, 1);
 
         // Properties
@@ -94,7 +95,7 @@ class Hero extends GameObjects.Sprite {
 
         if (IS_DEV) {
             this.debugText = this.scene.add.text(0, 0, '');
-            this.debugText.setDepth(700);
+            this.debugText.setDepth(900);
             this.debugText.setFontSize(12);
         }
 

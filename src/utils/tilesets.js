@@ -2,7 +2,7 @@
 import { GameObjects, Tilemaps } from 'phaser';
 import { TILESET_HEIGHT, TILESET_WIDTH } from '../constants/constants';
 import GameGroup from '../sprites/Prefabs/GameGroup';
-import {isset, isBoolean, getDegreeFromRadians, rotateRectangleInsideTile} from './utils';
+import { isset, isBoolean, getDegreeFromRadians, rotateRectangleInsideTile } from './utils';
 
 export const getTilesetCustomColliders = (scene, tilesetLayer) => {
     const customColliders = [];
@@ -19,7 +19,7 @@ export const getTilesetCustomColliders = (scene, tilesetLayer) => {
                     const { objects } = objectgroup;
                     objects.forEach((objectData) => {
                         let { height, width, x, y } = objectData;
-                        console.log(JSON.stringify({x, y}));
+                        console.log(JSON.stringify({ x, y }));
                         const {
                             collidesLeft,
                             collidesRight,

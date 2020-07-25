@@ -1,4 +1,5 @@
 import { GameObjects } from 'phaser';
+import { BACKGROUND_DEPTH } from '../constants/constants';
 
 class Background extends GameObjects.Image {
     constructor({
@@ -10,7 +11,7 @@ class Background extends GameObjects.Image {
     }) {
         super(scene, x, y, asset, frame);
         this.setOrigin(0, 0);
-        this.setDepth(0);
+        this.setDepth(BACKGROUND_DEPTH);
     }
 }
 

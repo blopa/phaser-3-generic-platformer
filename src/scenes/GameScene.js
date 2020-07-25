@@ -2,6 +2,7 @@ import { Scene } from 'phaser';
 import { createMapWithDynamicLayers, getMapObjectLayer, getTilesetCustomColliders } from '../utils/tilesets';
 import Hero from '../sprites/Hero';
 import Background from "../sprites/Background";
+import {HERO_DEPTH} from "../constants/constants";
 
 class GameScene extends Scene {
     constructor() {
@@ -42,7 +43,13 @@ class GameScene extends Scene {
         this.physics.add.collider(dynamicLayers.elements, this.player);
         this.physics.add.collider(mapGroundColliders, this.player);
         this.physics.add.collider(mapElementsColliders, this.player);
-        // this.physics.world.addCollider(this.player, mapCustomColliders);
+
+        // Set depths
+        dynamicLayers.background?.setDepth(HERO_DEPTH - 3);
+        dynamicLayers.ground?.setDepth(HERO_DEPTH - 2);
+        dynamicLayers.elements?.setDepth(HERO_DEPTH - 1);
+        dynamicLayers.foreground?.setDepth(HERO_DEPTH + 1);
+        dynamicLayers.foreground_2?.setDepth(HERO_DEPTH + 2);
 
         // set the boundaries of our game world
         this.physics.world.bounds.width = dynamicLayers.background.width;
