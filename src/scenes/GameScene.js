@@ -1,8 +1,8 @@
 import { Scene } from 'phaser';
 import { createMapWithDynamicLayers, getMapObjectLayer, getTilesetCustomColliders } from '../utils/tilesets';
 import Hero from '../sprites/Hero';
-import Background from "../sprites/Background";
-import {HERO_DEPTH} from "../constants/constants";
+import Background from '../sprites/Background';
+import { HERO_DEPTH } from '../constants/constants';
 
 class GameScene extends Scene {
     constructor() {
