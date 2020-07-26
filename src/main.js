@@ -8,6 +8,8 @@ import MainMenuScene from './scenes/MainMenuScene';
 
 import config from './config';
 
+window.screen.orientation?.lock?.('landscape');
+window.screen.lockOrientation?.('landscape');
 const gameConfig = Object.assign(config, {
     scene: [
         BootScene,

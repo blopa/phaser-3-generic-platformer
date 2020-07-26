@@ -1,4 +1,4 @@
-import { Scene } from 'phaser';
+import {Input, Scene} from 'phaser';
 import { createMapWithDynamicLayers, getMapObjectLayer, getTilesetCustomColliders } from '../utils/tilesets';
 import Hero from '../sprites/Hero';
 import Background from '../sprites/Background';
@@ -42,8 +42,8 @@ class GameScene extends Scene {
         const mapGroundColliders = getTilesetCustomColliders(this, dynamicLayers.ground.layer);
         const mapElementsColliders = getTilesetCustomColliders(this, dynamicLayers.elements.layer);
         this.physics.add.collider(dynamicLayers.ground, this.player);
-        this.physics.add.collider(dynamicLayers.elements, this.player);
-        this.physics.add.collider(mapGroundColliders, this.player);
+        this.elementsCollider = this.physics.add.collider(dynamicLayers.elements, this.player);
+        this.elementsCollider = this.physics.add.collider(mapGroundColliders, this.player);
         this.physics.add.collider(mapElementsColliders, this.player);
 
         // Set depths
@@ -101,6 +101,20 @@ class GameScene extends Scene {
                 }
             });
         });
+        // TODO
+        if (this.player.isHeroOnGround()) {
+            if (Input.Keyboard.JustDown(this.player.controlKeys.down)) {
+                console.log('go down');
+                this.elementsCollider.active = false;
+                this.time.delayedCall(
+                    200,
+                    () => {
+                        console.log('all normal');
+                        this.elementsCollider.active = true;
+                    }
+                );
+            }
+        }
     }
 }
 

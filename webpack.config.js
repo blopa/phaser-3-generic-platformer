@@ -27,6 +27,7 @@ const supportedImageTypes = ['png', 'jpg', 'svg', 'gif', 'webp'];
 const supportedAudioTypes = ['m4a', 'mp3', 'ogg', 'opus', 'wav', 'webm'];
 
 module.exports = async (env = {}) => {
+    const isMobileBuild = env === 'mobile';
     const stageFiles = await fs.readdir(STAGES_PATH);
     const tilesetFiles = await fs.readdir(TILESETS_PATH);
     const tilesetImageFiles = tilesetFiles
@@ -55,7 +56,7 @@ module.exports = async (env = {}) => {
                 // spritesFiles.map((spritesFile) =>
                 //     path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}/${spritesFile}`)),
                 path.resolve(__dirname, `${SPRITES_PATH}/${spritesFolder}`),
-                '../assets/atlases',
+                path.normalize('../assets/atlases'),
                 {
                     height: spriteMaxHeight + (spritePadding * 2),
                     textureName: spritesFolder,
@@ -121,6 +122,7 @@ module.exports = async (env = {}) => {
                 GAME_TILESET_WIDTH: JSON.stringify(tileWidth),
                 GAME_TILESET_HEIGHT: JSON.stringify(tileHeight),
                 GAME_STAGES,
+                IS_MOBILE_BUILD: JSON.stringify(isMobileBuild),
             }),
             new HtmlWebpackPlugin({
                 hash: true,

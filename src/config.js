@@ -1,14 +1,15 @@
-/* globals IS_DEV */
+/* globals IS_DEV, IS_MOBILE_BUILD */
 import Phaser from 'phaser';
 
 export default {
     type: Phaser.AUTO,
+    orientation: Phaser.Scale.LANDSCAPE,
     localStorageName: 'base-phaser-cordova-project',
     parent: 'content',
     width: 384,
     height: 216,
     scale: {
-        mode: Phaser.Scale.HEIGHT_CONTROLS_WIDTH,
+        mode: IS_MOBILE_BUILD ? Phaser.Scale.RESIZE : Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
     },
     autoRound: false,

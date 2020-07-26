@@ -8,7 +8,10 @@
         "dev": "npm install && webpack",
         "start": "webpack",
         "build": "webpack --config webpack.production.config.js",
+        "prepare-mobile": "cd mobile && cordova platform add android && cd ..",
         "build-mobile": "webpack --config webpack.production.config.js --env=mobile",
+        "build-apk": "cd mobile && cordova build --release android && cd ..",
+        "deploy": "npm run build-mobile && npm run build-apk",
         "test": "jest"
     },
     "license": "MIT",
