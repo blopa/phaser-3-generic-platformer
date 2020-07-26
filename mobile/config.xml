@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='utf-8'?>
 <widget id="com.example.app" version="1.0.0" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
-    <name>base-phaser-cordova-project</name>
+    <name>phaser-3-generic-platformer</name>
     <description>
         Description here.
     </description>
@@ -13,7 +13,7 @@
         <param name="android-package" value="nl.xservices.plugins.Insomnia" />
     </feature>
     <preference name="DisallowOverscroll" value="true" />
-    <preference name="Orientation" value="portrait" />
+    <preference name="Orientation" value="landscape" />
     <preference name="FullScreen" value="true" />
     <preference name="android-minSdkVersion" value="28" />
     <preference name="android-targetSdkVersion" value="28" />
@@ -37,5 +37,6 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
+    <plugin name="cordova-plugin-screen-orientation" spec="^3.0.2" />
     <engine name="android" spec="^7.1.4" />
 </widget>

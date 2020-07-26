@@ -1,0 +1,9 @@
+/* globals GAME_TILESET_WIDTH, GAME_TILESET_HEIGHT */
+
+export const TILESET_WIDTH = GAME_TILESET_WIDTH;
+export const TILESET_HEIGHT = GAME_TILESET_HEIGHT;
+
+// DEPTHS
+export const BACKGROUND_DEPTH = 0;
+export const ENEMY_DEPTH = 10;
+export const HERO_DEPTH = 50;
