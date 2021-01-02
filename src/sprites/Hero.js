@@ -151,7 +151,7 @@ class Hero extends GameObjects.Sprite {
                         'hero_idle_03',
                     ],
                 }),
-                frameRate: 3,
+                frameRate: 4,
                 // yoyo: true,
                 repeat: -1,
             });
@@ -172,7 +172,7 @@ class Hero extends GameObjects.Sprite {
                         'hero_run_08',
                     ],
                 }),
-                frameRate: 18,
+                frameRate: 10,
                 // yoyo: true,
                 repeat: -1,
             });
@@ -186,7 +186,7 @@ class Hero extends GameObjects.Sprite {
                         'hero_jump_01',
                     ],
                 }),
-                frameRate: 12,
+                frameRate: 10,
                 // yoyo: true,
                 repeat: 0,
             });
@@ -221,7 +221,7 @@ class Hero extends GameObjects.Sprite {
                         'hero_run_08',
                     ],
                 }),
-                frameRate: 6,
+                frameRate: 20,
                 repeat: -1,
             });
         }
